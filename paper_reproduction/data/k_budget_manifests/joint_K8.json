@@ -1,0 +1,151 @@
+{
+  "status": "complete",
+  "family": "joint",
+  "budget": 8,
+  "physical_channel_count": 8,
+  "T4_channel_count": 4,
+  "mask_channel_count": 5,
+  "input_width": 13,
+  "selected_physical_full_channels": [
+    60,
+    2,
+    110,
+    63,
+    100,
+    101,
+    14,
+    82
+  ],
+  "selected_full_token_channels": [
+    60,
+    2,
+    110,
+    63,
+    100,
+    101,
+    14,
+    82,
+    117,
+    118,
+    119,
+    120,
+    121
+  ],
+  "selected_channels": [
+    {
+      "channel": 60,
+      "family": "contiguous_three_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "raw_T3/mode_0_sv_3",
+      "svd_based": true,
+      "mask": false
+    },
+    {
+      "channel": 2,
+      "family": "pair",
+      "raw_or_connected": "raw",
+      "pair_distance": 1,
+      "invariant_mathematical_name": "raw_T2/sv_2",
+      "svd_based": true,
+      "mask": false
+    },
+    {
+      "channel": 110,
+      "family": "contiguous_four_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "s_3(T4 unfolding 14|23)",
+      "svd_based": true,
+      "mask": false,
+      "t4_manifest": {
+        "channel_id": 33,
+        "family": "T4_2|2_SVD",
+        "partition": "14|23",
+        "singular_value_index": 3,
+        "SVD_based": true,
+        "mathematical_definition": "s_3(T4 unfolding 14|23)",
+        "anchor_convention": "left anchor i on contiguous sites (i,i+1,i+2,i+3)",
+        "raw_or_connected": "raw"
+      }
+    },
+    {
+      "channel": 63,
+      "family": "contiguous_three_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "raw_T3/mode_1_sv_3",
+      "svd_based": true,
+      "mask": false
+    },
+    {
+      "channel": 100,
+      "family": "contiguous_four_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "s_2(T4 unfolding 13|24)",
+      "svd_based": true,
+      "mask": false,
+      "t4_manifest": {
+        "channel_id": 23,
+        "family": "T4_2|2_SVD",
+        "partition": "13|24",
+        "singular_value_index": 2,
+        "SVD_based": true,
+        "mathematical_definition": "s_2(T4 unfolding 13|24)",
+        "anchor_convention": "left anchor i on contiguous sites (i,i+1,i+2,i+3)",
+        "raw_or_connected": "raw"
+      }
+    },
+    {
+      "channel": 101,
+      "family": "contiguous_four_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "s_3(T4 unfolding 13|24)",
+      "svd_based": true,
+      "mask": false,
+      "t4_manifest": {
+        "channel_id": 24,
+        "family": "T4_2|2_SVD",
+        "partition": "13|24",
+        "singular_value_index": 3,
+        "SVD_based": true,
+        "mathematical_definition": "s_3(T4 unfolding 13|24)",
+        "anchor_convention": "left anchor i on contiguous sites (i,i+1,i+2,i+3)",
+        "raw_or_connected": "raw"
+      }
+    },
+    {
+      "channel": 14,
+      "family": "pair",
+      "raw_or_connected": "connected",
+      "pair_distance": 1,
+      "invariant_mathematical_name": "connected_C2/right_contraction_norm",
+      "svd_based": false,
+      "mask": false
+    },
+    {
+      "channel": 82,
+      "family": "contiguous_four_body",
+      "raw_or_connected": "raw",
+      "pair_distance": null,
+      "invariant_mathematical_name": "s_2(T4 unfolding 2|134)",
+      "svd_based": true,
+      "mask": false,
+      "t4_manifest": {
+        "channel_id": 5,
+        "family": "T4_1|3_SVD",
+        "partition": "2|134",
+        "singular_value_index": 2,
+        "SVD_based": true,
+        "mathematical_definition": "s_2(T4 unfolding 2|134)",
+        "anchor_convention": "left anchor i on contiguous sites (i,i+1,i+2,i+3)",
+        "raw_or_connected": "raw"
+      }
+    }
+  ],
+  "N32_used_for_selection": false,
+  "exact500_used_for_selection": false,
+  "exact5000_accessed": false
+}

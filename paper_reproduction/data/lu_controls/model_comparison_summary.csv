@@ -1,0 +1,13 @@
+model,model_display,benchmark,metric,value,separable_FPR,E2_recall,E_gt_2_recall,E3_recall,E4_recall
+raw,Raw-correlator Transformer,N16_balanced,AUROC,0.6806868355624145,1.0,0.7763578274760383,0.907563025210084,,
+raw,Raw-correlator Transformer,N32_XY,AUROC,0.7115162037037037,1.0,0.9038461538461539,1.0,1.0,1.0
+raw,Raw-correlator Transformer,N32_DPI,AUROC,0.8637984375,0.03,0.365,0.43333333333333335,0.49333333333333335,0.37333333333333335
+raw,Raw-correlator Transformer,N32_GeneralSep,FPR,0.003,0.003,,,,
+siamese,Siamese LU-optimized Transformer,N16_balanced,AUROC,0.5676547496570645,1.0,0.6389776357827476,0.8823529411764706,,
+siamese,Siamese LU-optimized Transformer,N32_XY,AUROC,0.4751157407407407,1.0,0.6634615384615384,0.925,0.9125,0.95
+siamese,Siamese LU-optimized Transformer,N32_DPI,AUROC,0.8224273437499999,0.4125,0.98,1.0,1.0,1.0
+siamese,Siamese LU-optimized Transformer,N32_GeneralSep,FPR,0.277,0.277,,,,
+joint_k16,Joint-K16 LU invariants,N16_balanced,AUROC,1.0,0.0,1.0,1.0,,
+joint_k16,Joint-K16 LU invariants,N32_XY,AUROC,1.0,0.0,1.0,1.0,1.0,1.0
+joint_k16,Joint-K16 LU invariants,N32_DPI,AUROC,0.99984375,0.0,0.9875,0.9833333333333333,0.9666666666666667,1.0
+joint_k16,Joint-K16 LU invariants,N32_GeneralSep,FPR,0.003,0.003,,,,

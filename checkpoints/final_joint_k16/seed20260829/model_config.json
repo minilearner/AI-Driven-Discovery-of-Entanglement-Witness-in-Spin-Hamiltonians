@@ -1,0 +1,198 @@
+{
+  "model_name": "RoPETransformer_JointK16_Dv1_only_seed20260829",
+  "experiment": "joint_k16_training_distribution_ablation_v1",
+  "training_route": "Dv1_only",
+  "training_sources": [
+    "D_v1"
+  ],
+  "model_config": {
+    "physical_channels": 21,
+    "d_model": 128,
+    "layers": 4,
+    "heads": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.1,
+    "position_encoding": "rope",
+    "pooling": "cls"
+  },
+  "training_config": {
+    "seed": 20260829,
+    "batch_size": 256,
+    "eval_batch_size": 512,
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "max_epochs": 120,
+    "patience": 15,
+    "scheduler_patience": 4,
+    "gradient_clip": 5.0,
+    "threshold": 0.5
+  },
+  "parameter_count": 483969,
+  "physical_channels_per_token": 16,
+  "mask_channels": 5,
+  "input_width": 21,
+  "selected_full_token_channels": [
+    60,
+    2,
+    110,
+    63,
+    100,
+    101,
+    14,
+    82,
+    62,
+    109,
+    44,
+    83,
+    91,
+    51,
+    3,
+    59,
+    117,
+    118,
+    119,
+    120,
+    121
+  ],
+  "selection_manifest": "configs/joint_K16.json",
+  "selection_manifest_byte_sha256": "fdcb0124a01b7445569f1b24dd6b4f6a370683edc286d37fa147d420f4e5fe86",
+  "selection_manifest_semantic_sha256": "cb2e117ec9306bcfa70b28827c2817e02e9b6a047881b785c58e184cd5c3ad3b",
+  "implementation_git_commit": "unknown",
+  "train_route_hash": "7d2c05dfc3c33fac47fedb6bc54df74bd1f7c3a68a31f267dfef3aeeb1c8a2c5",
+  "validation_route_hash": "c8b5008adb0ebbffc5161c09619516864433815779cb988aea1019f4fa2dd4d7",
+  "training_set_audit": {
+    "route": "Dv1_only",
+    "sources": [
+      "D_v1"
+    ],
+    "splits": {
+      "train": {
+        "total_rows": 35000,
+        "Sep": 17500,
+        "Ent": 17500,
+        "route_hash": "7d2c05dfc3c33fac47fedb6bc54df74bd1f7c3a68a31f267dfef3aeeb1c8a2c5",
+        "by_source": {
+          "D_v1": {
+            "rows": 35000,
+            "Sep": 17500,
+            "Ent": 17500,
+            "E2_certifiable_positive_count": 17500,
+            "E2_certifiable_fraction_of_positives": 1.0,
+            "known_E_gt_2_positive_count": 0,
+            "known_E_gt_2_fraction_of_positives": 0.0,
+            "generator_or_family_composition": {
+              "classical_ghz_mixture": 1749,
+              "noisy_random_mps": 17500,
+              "product_state": 3523,
+              "separable_convex_mixture": 12228
+            },
+            "certificate_composition": {
+              "constructive_fully_separable": 17500,
+              "two_site_npt": 17500
+            }
+          }
+        }
+      },
+      "validation": {
+        "total_rows": 7500,
+        "Sep": 3750,
+        "Ent": 3750,
+        "route_hash": "c8b5008adb0ebbffc5161c09619516864433815779cb988aea1019f4fa2dd4d7",
+        "by_source": {
+          "D_v1": {
+            "rows": 7500,
+            "Sep": 3750,
+            "Ent": 3750,
+            "E2_certifiable_positive_count": 3750,
+            "E2_certifiable_fraction_of_positives": 1.0,
+            "known_E_gt_2_positive_count": 0,
+            "known_E_gt_2_fraction_of_positives": 0.0,
+            "generator_or_family_composition": {
+              "classical_ghz_mixture": 366,
+              "noisy_random_mps": 3750,
+              "product_state": 723,
+              "separable_convex_mixture": 2661
+            },
+            "certificate_composition": {
+              "constructive_fully_separable": 3750,
+              "two_site_npt": 3750
+            }
+          }
+        }
+      },
+      "test": {
+        "total_rows": 7500,
+        "Sep": 3750,
+        "Ent": 3750,
+        "route_hash": "87fd6d3d6efc041078f4531b6e1b3101af0469207dc6cb4641fb2882d02de293",
+        "by_source": {
+          "D_v1": {
+            "rows": 7500,
+            "Sep": 3750,
+            "Ent": 3750,
+            "E2_certifiable_positive_count": 3750,
+            "E2_certifiable_fraction_of_positives": 1.0,
+            "known_E_gt_2_positive_count": 0,
+            "known_E_gt_2_fraction_of_positives": 0.0,
+            "generator_or_family_composition": {
+              "classical_ghz_mixture": 385,
+              "noisy_random_mps": 3750,
+              "product_state": 754,
+              "separable_convex_mixture": 2611
+            },
+            "certificate_composition": {
+              "constructive_fully_separable": 3750,
+              "two_site_npt": 3750
+            }
+          }
+        }
+      }
+    }
+  },
+  "normalization": {
+    "algorithm": "translation-tied moments over valid anchors of the actual training route; masks fixed to mean=0,std=1",
+    "counts_by_selected_channel": [
+      490000,
+      525000,
+      455000,
+      490000,
+      455000,
+      455000,
+      525000,
+      455000,
+      490000,
+      455000,
+      420000,
+      455000,
+      455000,
+      420000,
+      525000,
+      490000,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "minimum_std": 0.03473397544909685,
+    "maximum_std": 1.0
+  },
+  "normalization_fit_sources": [
+    "D_v1"
+  ],
+  "checkpoint_selection": "minimum canonical N16 validation BCE only",
+  "architecture_frozen": {
+    "d_model": 128,
+    "layers": 4,
+    "heads": 4,
+    "FFN": 192,
+    "dropout": 0.1,
+    "RoPE": "Q/K",
+    "pooling": "CLS"
+  },
+  "DPI_training_rows": 0,
+  "XY_training_rows": 0,
+  "N32_training_rows": 0,
+  "exact500_used_for_checkpoint_selection": false,
+  "exact5000_accessed": false
+}

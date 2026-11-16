@@ -1,0 +1,234 @@
+[
+  {
+    "benchmark": "XXZ",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/adaptive_gibbs_ood_n16_v1/xxz/dataset.h5",
+    "dataset_sha256": "aef4d0fd39333c6d26b07ef7cecb935263e0039836bd8e4a9a577d39fbe86c25",
+    "preservation_hash_match": true,
+    "counts": {
+      "total": 343,
+      "Sep": 79,
+      "E2": 103,
+      "E3": 52,
+      "E4": 30,
+      "Unknown": 79
+    },
+    "metrics": {
+      "AUROC": 1.0,
+      "TNR": 1.0,
+      "E2_recall": 0.9902912621359223,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "E_gt_2_recall": 1.0
+    },
+    "paper_metrics": {
+      "AUROC": 1.0,
+      "E2_recall": 0.9903,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "TNR": 1.0
+    },
+    "difference_from_paper": {
+      "AUROC": 0.0,
+      "E2_recall": -8.73786407762367e-06,
+      "E3_recall": 0.0,
+      "E4_recall": 0.0,
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": null,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  },
+  {
+    "benchmark": "J1-J2",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/adaptive_gibbs_ood_n16_v1/j1j2/dataset.h5",
+    "dataset_sha256": "7fa84377775fe5db71bf0f3f63b5fb857d9d46435a03de4e54520e036c274aeb",
+    "preservation_hash_match": true,
+    "counts": {
+      "total": 463,
+      "Sep": 30,
+      "E2": 155,
+      "E3": 80,
+      "E4": 30,
+      "Unknown": 168
+    },
+    "metrics": {
+      "AUROC": 1.0,
+      "TNR": 1.0,
+      "E2_recall": 0.864516129032258,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "E_gt_2_recall": 1.0
+    },
+    "paper_metrics": {
+      "AUROC": 1.0,
+      "E2_recall": 0.8645,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "TNR": 1.0
+    },
+    "difference_from_paper": {
+      "AUROC": 0.0,
+      "E2_recall": 1.6129032258005438e-05,
+      "E3_recall": 0.0,
+      "E4_recall": 0.0,
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": null,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  },
+  {
+    "benchmark": "Random-local-H",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/adaptive_gibbs_ood_n16_v1/dh_family/dataset.h5",
+    "dataset_sha256": "ff787da47d9a795b7cc2086c552dbdd02d9fb1db39aafb26fdd6cc269bb71dbe",
+    "preservation_hash_match": true,
+    "counts": {
+      "total": 626,
+      "Sep": 39,
+      "E2": 238,
+      "E3": 87,
+      "E4": 40,
+      "Unknown": 222
+    },
+    "metrics": {
+      "AUROC": 1.0,
+      "TNR": 1.0,
+      "E2_recall": 1.0,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "E_gt_2_recall": 1.0
+    },
+    "paper_metrics": {
+      "AUROC": 1.0,
+      "E2_recall": 1.0,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "TNR": 1.0
+    },
+    "difference_from_paper": {
+      "AUROC": 0.0,
+      "E2_recall": 0.0,
+      "E3_recall": 0.0,
+      "E4_recall": 0.0,
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": null,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  },
+  {
+    "benchmark": "N32-XY",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/xy_n32_pbc_matched_exact500_v1/dataset.h5",
+    "dataset_sha256": "718023a40493fbee81ee4cf5df356b08eb7ff5c585bb3755b37a0db7ba2bfa51",
+    "preservation_hash_match": false,
+    "counts": {
+      "total": 500,
+      "Sep": 20,
+      "E2": 312,
+      "E3": 80,
+      "E4": 40,
+      "Unknown": 48
+    },
+    "metrics": {
+      "AUROC": 1.0,
+      "TNR": 1.0,
+      "E2_recall": 1.0,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "E_gt_2_recall": 1.0
+    },
+    "paper_metrics": {
+      "AUROC": 1.0,
+      "E2_recall": 1.0,
+      "E3_recall": 1.0,
+      "E4_recall": 1.0,
+      "TNR": 1.0
+    },
+    "difference_from_paper": {
+      "AUROC": 0.0,
+      "E2_recall": 0.0,
+      "E3_recall": 0.0,
+      "E4_recall": 0.0,
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": 0.00011772910753882204,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  },
+  {
+    "benchmark": "N32-synthetic",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/dpi_n32_general_v1/D_PI_N32.h5",
+    "dataset_sha256": "14a8f12925808bde7501454d780b72908dca0d6c28b3496dce3555f8f4293d73",
+    "preservation_hash_match": true,
+    "counts": {
+      "total": 2000,
+      "Sep": 400,
+      "E2": 400,
+      "E3": 600,
+      "E4": 600,
+      "Unknown": 0
+    },
+    "metrics": {
+      "AUROC": 0.9998437500000001,
+      "TNR": 1.0,
+      "E2_recall": 0.9875,
+      "E3_recall": 0.9666666666666667,
+      "E4_recall": 1.0,
+      "E_gt_2_recall": 0.9833333333333333
+    },
+    "paper_metrics": {
+      "AUROC": 0.99984375,
+      "E2_recall": 0.9875,
+      "E3_recall": 0.9666666666666667,
+      "E4_recall": 1.0,
+      "TNR": 1.0
+    },
+    "difference_from_paper": {
+      "AUROC": 1.1102230246251565e-16,
+      "E2_recall": 0.0,
+      "E3_recall": 0.0,
+      "E4_recall": 0.0,
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": 0.0008268857263828977,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  },
+  {
+    "benchmark": "General-Sep",
+    "model": "Dv1-only Joint-K16",
+    "dataset": "data/general_separable_ood_n32_v1/dataset.h5",
+    "dataset_sha256": "25e5934b613d96c6d0c472ae4eb190273e25886ad141b72106df2167ca6468e8",
+    "preservation_hash_match": true,
+    "counts": {
+      "total": 2000,
+      "Sep": 2000,
+      "E2": 0,
+      "E3": 0,
+      "E4": 0,
+      "Unknown": 0
+    },
+    "metrics": {
+      "AUROC": null,
+      "TNR": 0.997,
+      "E2_recall": null,
+      "E3_recall": null,
+      "E4_recall": null,
+      "E_gt_2_recall": null
+    },
+    "paper_metrics": {
+      "TNR": 0.997
+    },
+    "difference_from_paper": {
+      "TNR": 0.0
+    },
+    "max_abs_difference_vs_saved_per_row": 0.0002134992923288337,
+    "unknown_excluded": true,
+    "threshold": 0.5
+  }
+]

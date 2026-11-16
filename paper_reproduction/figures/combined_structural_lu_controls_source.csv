@@ -1,0 +1,58 @@
+section,panel,benchmark,model_or_variant,metric,value
+structural,a,N16,Joint-K16,AUROC,1.0000
+structural,a,N32_XY,Joint-K16,AUROC,1.0000
+structural,a,N32_DPI,Joint-K16,AUROC,0.9977
+structural,b,N32_DPI,T1-T3,E4_recall,0.3311
+structural,b,N32_DPI,+2_T4,E4_recall,0.9378
+structural,b,N32_DPI,Joint-K16,E4_recall,1.0000
+ood,d,XXZ,Dv1-only Joint-K16,AUROC,1.0000
+ood,d,XXZ,Dv1-only Joint-K16,E2_recall,0.9903
+ood,d,XXZ,Dv1-only Joint-K16,E_gt_2_recall,1.0000
+ood,d,XXZ,Dv1-only Joint-K16,FPR,0.0000
+ood,d,J1-J2,Dv1-only Joint-K16,AUROC,1.0000
+ood,d,J1-J2,Dv1-only Joint-K16,E2_recall,0.8645
+ood,d,J1-J2,Dv1-only Joint-K16,E_gt_2_recall,1.0000
+ood,d,J1-J2,Dv1-only Joint-K16,FPR,0.0000
+ood,d,Random_local_H,Dv1-only Joint-K16,AUROC,1.0000
+ood,d,Random_local_H,Dv1-only Joint-K16,E2_recall,1.0000
+ood,d,Random_local_H,Dv1-only Joint-K16,E_gt_2_recall,1.0000
+ood,d,Random_local_H,Dv1-only Joint-K16,FPR,0.0000
+representation,e,N16_balanced,raw,AUROC,0.6944283693415638
+representation,e,N16_balanced,raw,E2_recall,0.8913738019169329
+representation,e,N16_balanced,raw,E_gt_2_recall,1.0
+representation,e,N16_balanced,raw,FPR,1.0000
+representation,e,N16_balanced,soft_lu,AUROC,0.5975008573388203
+representation,e,N16_balanced,soft_lu,E2_recall,0.6325878594249201
+representation,e,N16_balanced,soft_lu,E_gt_2_recall,0.8739495798319328
+representation,e,N16_balanced,soft_lu,FPR,1.0000
+representation,e,N16_balanced,joint_k16,AUROC,1.0000
+representation,e,N16_balanced,joint_k16,E2_recall,1.0000
+representation,e,N16_balanced,joint_k16,E_gt_2_recall,1.0000
+representation,e,N16_balanced,joint_k16,FPR,0.0000
+representation,f,N32_XY,raw,AUROC,0.39305555555555555
+representation,f,N32_XY,raw,E2_recall,1.0
+representation,f,N32_XY,raw,E_gt_2_recall,1.0000
+representation,f,N32_XY,raw,FPR,1.0000
+representation,f,N32_XY,soft_lu,AUROC,0.607175925925926
+representation,f,N32_XY,soft_lu,E2_recall,0.7467948717948718
+representation,f,N32_XY,soft_lu,E_gt_2_recall,0.95
+representation,f,N32_XY,soft_lu,FPR,1.0000
+representation,f,N32_XY,joint_k16,AUROC,1.0000
+representation,f,N32_XY,joint_k16,E2_recall,1.0000
+representation,f,N32_XY,joint_k16,E_gt_2_recall,1.0000
+representation,f,N32_XY,joint_k16,FPR,0.0000
+representation,g,N32_DPI,raw,AUROC,0.12117968750000001
+representation,g,N32_DPI,raw,E2_recall,0.0
+representation,g,N32_DPI,raw,E_gt_2_recall,0.0
+representation,g,N32_DPI,raw,FPR,0.02
+representation,g,N32_DPI,soft_lu,AUROC,0.6856031250000001
+representation,g,N32_DPI,soft_lu,E2_recall,0.4075
+representation,g,N32_DPI,soft_lu,E_gt_2_recall,0.5033333333333333
+representation,g,N32_DPI,soft_lu,FPR,0.3325
+representation,g,N32_DPI,joint_k16,AUROC,0.99984375
+representation,g,N32_DPI,joint_k16,E2_recall,0.9875
+representation,g,N32_DPI,joint_k16,E_gt_2_recall,0.9833333333333333
+representation,g,N32_DPI,joint_k16,FPR,0.0000
+representation,h,N32_GeneralSep,raw,FPR,0.06
+representation,h,N32_GeneralSep,soft_lu,FPR,0.2885
+representation,h,N32_GeneralSep,joint_k16,FPR,0.0030

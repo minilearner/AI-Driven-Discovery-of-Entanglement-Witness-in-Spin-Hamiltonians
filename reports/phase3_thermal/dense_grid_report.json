@@ -1,0 +1,25 @@
+{
+  "route": "Dv1+R2Support only",
+  "model": "new appendix-control ensemble",
+  "N": 16,
+  "gamma": 0,
+  "boundary_condition": "PBC",
+  "panels": [
+    {
+      "name": "lower",
+      "h_count": 201,
+      "temperature_count": 151,
+      "point_count": 30351,
+      "seed_disagreement_fraction": 0.027807979967711113
+    },
+    {
+      "name": "upper",
+      "h_count": 181,
+      "temperature_count": 101,
+      "point_count": 18281,
+      "seed_disagreement_fraction": 0.5358021990044308
+    }
+  ],
+  "total_new_grid_points": 48632,
+  "source": "direct exact XY features and three frozen checkpoints; no interpolation"
+}

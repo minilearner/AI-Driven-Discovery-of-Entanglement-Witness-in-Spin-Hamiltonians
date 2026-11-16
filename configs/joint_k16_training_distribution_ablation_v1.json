@@ -1,0 +1,47 @@
+{
+  "experiment": "joint_k16_training_distribution_ablation_v1",
+  "representation": {
+    "manifest": "configs/joint_K16.json",
+    "r_max": 4,
+    "physical_channels": 16,
+    "mask_channels": 5,
+    "input_width": 21,
+    "feature_selection_frozen": true
+  },
+  "architecture": {
+    "layers": 4,
+    "d_model": 128,
+    "heads": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.1,
+    "position_encoding": "rope",
+    "pooling": "cls",
+    "expected_parameter_count": 483969
+  },
+  "training": {
+    "seeds": [20260829, 20260830, 20260831],
+    "batch_size": 256,
+    "eval_batch_size": 512,
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "max_epochs": 120,
+    "patience": 15,
+    "scheduler_patience": 4,
+    "gradient_clip": 5.0,
+    "threshold": 0.5,
+    "normalization": "same translation-tied train-only algorithm, refit on each actual route so Dpair/DH are not exposed to Dv1-only"
+  },
+  "routes": {
+    "Dv1_only": ["D_v1"],
+    "Dv1_plus_Dpair": ["D_v1", "D_pair"],
+    "Dv1_plus_DH": ["D_v1", "D_H"],
+    "historical_full_reference": ["D_v1", "D_pair", "D_H"]
+  },
+  "primary_success_criterion": {
+    "exact500_AUROC_delta_min": -0.02,
+    "exact500_E_gt_2_recall_delta_min": -0.05,
+    "general_separable_FPR_max": 0.01
+  },
+  "development_only": true,
+  "exact5000_accessed": false
+}

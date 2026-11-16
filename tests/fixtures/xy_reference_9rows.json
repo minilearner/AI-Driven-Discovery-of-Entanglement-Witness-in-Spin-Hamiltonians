@@ -1,0 +1,12 @@
+{
+  "description": "Nine rows from the frozen N=16 balanced XY LU-invariant token cache",
+  "token_width": 122,
+  "selected_input_width": 21,
+  "source_hashes": {
+    "token_cache_sha256": "1eaff9680af866b88cc4fc629e8fd6a1bd71c4c5fbb5a394af7cf1665eaf0416",
+    "seed20260829_scores_sha256": "30db6662cbaf3654920663f5535c2866985ace1256f4ae3938d9c6609ac81bf8",
+    "seed20260830_scores_sha256": "a1bc63bec9066f27ce581f15354cb37a417f3193e9375d43ce0c962f8a204fa4",
+    "seed20260831_scores_sha256": "b23d48ed77c8a567c904c5eddc4257f4c1b5ab44b33f148756b61eed9c1b966e",
+    "benchmark_hdf5_sha256": "fe7bf4f429c4e30df01f882e680b6c76e846b6462da0933e3449a0b4d516df9d"
+  }
+}

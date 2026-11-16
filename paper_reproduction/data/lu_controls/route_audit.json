@@ -1,0 +1,36 @@
+{
+  "training_sources": [
+    "D_v1"
+  ],
+  "D_pair_rows": 0,
+  "D_H_rows": 0,
+  "DPI_training_rows": 0,
+  "N32_training_rows": 0,
+  "evaluation_benchmarks_used_for_checkpoint_selection": false,
+  "checkpoint_selected_by": "minimum canonical Dv1 validation BCE only",
+  "exact5000_accessed": false,
+  "parent_split_audit": {
+    "parent_key": "parent_state_id",
+    "rows": 50000,
+    "unique_parents": 50000,
+    "parents_crossing_splits": 0
+  },
+  "train_rows": 35000,
+  "train_positive_rows": 17500,
+  "train_negative_rows": 17500,
+  "train_min_row": 0,
+  "train_max_row": 49997,
+  "validation_rows": 7500,
+  "validation_positive_rows": 3750,
+  "validation_negative_rows": 3750,
+  "validation_min_row": 8,
+  "validation_max_row": 49990,
+  "test_rows": 7500,
+  "test_positive_rows": 3750,
+  "test_negative_rows": 3750,
+  "test_min_row": 9,
+  "test_max_row": 49999,
+  "row_overlap_train_validation": 0,
+  "row_overlap_train_test": 0,
+  "row_overlap_validation_test": 0
+}

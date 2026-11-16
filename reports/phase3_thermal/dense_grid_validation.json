@@ -1,0 +1,10 @@
+{
+  "lower": {
+    "common_points": 651,
+    "max_abs_p_difference": 3.0994415283203125e-06
+  },
+  "upper": {
+    "common_points": 777,
+    "max_abs_p_difference": 4.470348358154297e-06
+  }
+}

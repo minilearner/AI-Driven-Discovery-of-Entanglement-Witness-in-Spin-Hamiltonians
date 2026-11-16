@@ -1,0 +1,21 @@
+{
+  "description": "Nine J1-J2 rows for the separate Dv1+R2Support appendix control",
+  "dataset_sha256": "7fa84377775fe5db71bf0f3f63b5fb857d9d46435a03de4e54520e036c274aeb",
+  "score_csv_sha256": "368ab0a13ad212ba6a5d2bda4eb0dd02935040b5b3dc77d85cdc7a14d1d109d9",
+  "token_shape": [
+    9,
+    16,
+    21
+  ],
+  "rows": [
+    8,
+    10,
+    0,
+    1,
+    184,
+    185,
+    183,
+    193,
+    196
+  ]
+}

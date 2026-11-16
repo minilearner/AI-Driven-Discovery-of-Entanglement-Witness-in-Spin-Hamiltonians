@@ -1,0 +1,251 @@
+{
+  "status": "complete",
+  "experiment": "r4_pair_ablation_dv1_only_v1",
+  "training_sources": [
+    "D_v1"
+  ],
+  "route_hash": "ba22ca3d1ca5c7267788876cd000f97ab7522fe06d55f7a83f3517c12559edea",
+  "seeds": [
+    20260829,
+    20260830,
+    20260831
+  ],
+  "arms": {
+    "Dv1_Baseline_K16": {
+      "K": 16,
+      "channels": [
+        60,
+        2,
+        110,
+        63,
+        100,
+        101,
+        14,
+        82,
+        62,
+        109,
+        44,
+        83,
+        91,
+        51,
+        3,
+        59,
+        117,
+        118,
+        119,
+        120,
+        121
+      ],
+      "per_seed": {
+        "20260829": {
+          "exact500_AUROC": 1.0,
+          "balanced_AUROC": 1.0,
+          "N32_XY_AUROC": 1.0,
+          "GeneralSep_TNR": 0.9945
+        },
+        "20260830": {
+          "exact500_AUROC": 1.0,
+          "balanced_AUROC": 1.0,
+          "N32_XY_AUROC": 1.0,
+          "GeneralSep_TNR": 0.999
+        },
+        "20260831": {
+          "exact500_AUROC": 1.0,
+          "balanced_AUROC": 1.0,
+          "N32_XY_AUROC": 0.9999999999999999,
+          "GeneralSep_TNR": 0.9935
+        }
+      },
+      "probability_average_ensemble": {
+        "exact500_AUROC": 1.0,
+        "balanced_AUROC": 1.0,
+        "N32_XY_AUROC": 1.0,
+        "GeneralSep_TNR": 0.9945,
+        "GeneralSep_false_positives": 11
+      },
+      "seed_mean": {
+        "exact500_AUROC": 1.0,
+        "balanced_AUROC": 1.0,
+        "N32_XY_AUROC": 1.0,
+        "GeneralSep_TNR": 0.9956666666666667
+      },
+      "seed_sample_std": {
+        "exact500_AUROC": 0.0,
+        "balanced_AUROC": 0.0,
+        "N32_XY_AUROC": 7.850462293418876e-17,
+        "GeneralSep_TNR": 0.002929732638541129
+      },
+      "checkpoints_unchanged_during_evaluation": true
+    },
+    "Dv1_DropR4_K14": {
+      "K": 14,
+      "channels": [
+        60,
+        2,
+        110,
+        63,
+        100,
+        101,
+        14,
+        82,
+        62,
+        109,
+        83,
+        91,
+        3,
+        59,
+        117,
+        118,
+        119,
+        120,
+        121
+      ],
+      "per_seed": {
+        "20260829": {
+          "exact500_AUROC": 0.5462962962962963,
+          "balanced_AUROC": 0.5462962962962961,
+          "N32_XY_AUROC": 0.5347222222222222,
+          "GeneralSep_TNR": 0.8200000000000001
+        },
+        "20260830": {
+          "exact500_AUROC": 0.5810185185185185,
+          "balanced_AUROC": 0.5810185185185185,
+          "N32_XY_AUROC": 0.5902777777777779,
+          "GeneralSep_TNR": 0.8240000000000001
+        },
+        "20260831": {
+          "exact500_AUROC": 0.5324074074074074,
+          "balanced_AUROC": 0.5324074074074074,
+          "N32_XY_AUROC": 0.5439814814814815,
+          "GeneralSep_TNR": 0.819
+        }
+      },
+      "probability_average_ensemble": {
+        "exact500_AUROC": 0.5532407407407407,
+        "balanced_AUROC": 0.5532407407407406,
+        "N32_XY_AUROC": 0.5648148148148148,
+        "GeneralSep_TNR": 0.8185,
+        "GeneralSep_false_positives": 363
+      },
+      "seed_mean": {
+        "exact500_AUROC": 0.5532407407407408,
+        "balanced_AUROC": 0.5532407407407406,
+        "N32_XY_AUROC": 0.5563271604938271,
+        "GeneralSep_TNR": 0.8210000000000001
+      },
+      "seed_sample_std": {
+        "exact500_AUROC": 0.025038550524055455,
+        "balanced_AUROC": 0.025038550524055486,
+        "N32_XY_AUROC": 0.02976435420059561,
+        "GeneralSep_TNR": 0.002645751311064635
+      },
+      "checkpoints_unchanged_during_evaluation": true,
+      "paired_seed_deltas_vs_baseline": {
+        "20260829": {
+          "exact500_AUROC": -0.4537037037037037,
+          "balanced_AUROC": -0.45370370370370394,
+          "N32_XY_AUROC": -0.4652777777777778,
+          "GeneralSep_TNR": -0.1745
+        },
+        "20260830": {
+          "exact500_AUROC": -0.4189814814814815,
+          "balanced_AUROC": -0.4189814814814815,
+          "N32_XY_AUROC": -0.4097222222222221,
+          "GeneralSep_TNR": -0.17499999999999993
+        },
+        "20260831": {
+          "exact500_AUROC": -0.46759259259259256,
+          "balanced_AUROC": -0.46759259259259256,
+          "N32_XY_AUROC": -0.4560185185185184,
+          "GeneralSep_TNR": -0.1745000000000001
+        }
+      }
+    },
+    "Dv1_ReplaceR4_T4_K16": {
+      "K": 16,
+      "channels": [
+        60,
+        2,
+        110,
+        63,
+        100,
+        101,
+        14,
+        82,
+        62,
+        109,
+        83,
+        91,
+        3,
+        59,
+        85,
+        112,
+        117,
+        118,
+        119,
+        120,
+        121
+      ],
+      "per_seed": {
+        "20260829": {
+          "exact500_AUROC": 0.6203703703703703,
+          "balanced_AUROC": 0.6203703703703702,
+          "N32_XY_AUROC": 0.7222222222222222,
+          "GeneralSep_TNR": 0.8125
+        },
+        "20260830": {
+          "exact500_AUROC": 0.5925925925925926,
+          "balanced_AUROC": 0.5925925925925926,
+          "N32_XY_AUROC": 0.7152777777777778,
+          "GeneralSep_TNR": 0.8335
+        },
+        "20260831": {
+          "exact500_AUROC": 0.6967592592592593,
+          "balanced_AUROC": 0.6967592592592593,
+          "N32_XY_AUROC": 0.7268518518518519,
+          "GeneralSep_TNR": 0.815
+        }
+      },
+      "probability_average_ensemble": {
+        "exact500_AUROC": 0.6990740740740741,
+        "balanced_AUROC": 0.6990740740740741,
+        "N32_XY_AUROC": 0.7314814814814816,
+        "GeneralSep_TNR": 0.8175,
+        "GeneralSep_false_positives": 365
+      },
+      "seed_mean": {
+        "exact500_AUROC": 0.6365740740740741,
+        "balanced_AUROC": 0.6365740740740741,
+        "N32_XY_AUROC": 0.7214506172839507,
+        "GeneralSep_TNR": 0.8203333333333332
+      },
+      "seed_sample_std": {
+        "exact500_AUROC": 0.05394064906356969,
+        "balanced_AUROC": 0.053940649063569705,
+        "N32_XY_AUROC": 0.00582548953338792,
+        "GeneralSep_TNR": 0.011470977871713198
+      },
+      "checkpoints_unchanged_during_evaluation": true,
+      "paired_seed_deltas_vs_baseline": {
+        "20260829": {
+          "exact500_AUROC": -0.37962962962962965,
+          "balanced_AUROC": -0.37962962962962976,
+          "N32_XY_AUROC": -0.2777777777777778,
+          "GeneralSep_TNR": -0.18200000000000005
+        },
+        "20260830": {
+          "exact500_AUROC": -0.40740740740740744,
+          "balanced_AUROC": -0.40740740740740744,
+          "N32_XY_AUROC": -0.2847222222222222,
+          "GeneralSep_TNR": -0.16549999999999998
+        },
+        "20260831": {
+          "exact500_AUROC": -0.3032407407407407,
+          "balanced_AUROC": -0.3032407407407407,
+          "N32_XY_AUROC": -0.27314814814814803,
+          "GeneralSep_TNR": -0.1785000000000001
+        }
+      }
+    }
+  }
+}

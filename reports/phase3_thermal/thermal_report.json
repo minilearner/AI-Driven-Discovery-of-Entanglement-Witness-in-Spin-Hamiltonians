@@ -1,0 +1,61 @@
+{
+  "model": "new Dv1+R2Support appendix-control ensemble",
+  "N": 16,
+  "gamma": 0.0,
+  "hamiltonian": "H=-sum_i[(1+gamma)/2 XiXi+1+(1-gamma)/2 YiYi+1+h Zi]",
+  "boundary": "PBC",
+  "checkpoint_sha256": {
+    "20260829": "0cc9f419dc4ff5cd2502969daa4aa2f5ec999a7ff909f37c7a1411927dc95882",
+    "20260830": "edc4ba2f6469480c1a8a04e000cd8f1c5014fb3af7496651836dc93288e83416",
+    "20260831": "019ad9253d67817e0c9b68d6febc251095636ec79d967a228de76fd138079b00"
+  },
+  "grid": {
+    "h_count": 61,
+    "temperature_count": 81,
+    "h_range": [
+      0,
+      1.5
+    ],
+    "temperature_range": [
+      0.01,
+      100
+    ],
+    "seed_decision_disagreement_fraction": 0.15280307630034407,
+    "h_1p2_low_p": 1.4916094187356066e-05,
+    "h_1p2_max_p": 0.9999992251396179,
+    "h_1p2_high_p": 1.58072780322982e-05,
+    "h_1p2_crossings": [
+      {
+        "h": 1.2000000000000002,
+        "temperature": 0.0817154755002448,
+        "log10_temperature": -1.0876956878016444,
+        "crossing_index": 18,
+        "bracket_log10_width": 0.0001953124999999524
+      },
+      {
+        "h": 1.2000000000000002,
+        "temperature": 23.35850959288454,
+        "log10_temperature": 1.3684451288412376,
+        "crossing_index": 67,
+        "bracket_log10_width": 0.0001953124999999524
+      }
+    ]
+  },
+  "low_boundary_fit": {
+    "C_star": 0.002025976528498625,
+    "R2_log10T": 0.9994261027743905,
+    "RMSE_log10T": 0.00614103879808274,
+    "points": 19,
+    "h_min": 1.05,
+    "h_max": 1.5
+  },
+  "old_grid_comparison": {
+    "max_abs_p_difference": 0.8954320984251187,
+    "mean_abs_p_difference": 0.05950397323565386,
+    "decision_disagreement_fraction": 0.07468123861566485
+  },
+  "trajectory_points": 6,
+  "elapsed_seconds": 772.7947096000426,
+  "threshold": 0.5,
+  "old_probabilities_used_as_input": false
+}
