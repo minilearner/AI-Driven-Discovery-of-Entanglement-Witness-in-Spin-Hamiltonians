@@ -3,25 +3,28 @@
 Verification on Windows with Python 3.10.20 (CPU) is recorded here. The
 independent branch was cloned from the public GitHub URL into a new directory,
 and a fresh virtual environment was created. The preserved private archive
-was read to assemble the benchmark package; it was not edited. All routine
+was read to assemble the benchmark package; it was not edited. The package
+was then downloaded anonymously from the public GitHub Release in a separate
+check using the clean virtual environment, and verified before a second
+six-benchmark inference run. All routine
 inference, download, plotting, and smoke training entry points use
-release-relative paths. The Ubuntu GitHub Actions run for the updated `main`
-commit passed installation, 60 tests, model inference, the physical example,
+release-relative paths. An Ubuntu GitHub Actions run for the implementation
+passed installation, 60 tests, model inference, the physical example,
 the small HDF5 metric check, and the final-route training smoke:
-[run 44018941912](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/actions/runs/44018941912).
+[run 44020776648](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/actions/runs/44020776648).
 
 ## Results checked
 
-| Experiment | Model inference from HDF5 | Figure redrawn from compact data | Result |
-| --- | --- | --- | --- |
-| XXZ adaptive Gibbs, 343 rows | Yes, baseline ensemble | Fig. 2 | Aggregate metrics match |
-| J1–J2 adaptive Gibbs, 463 rows | Yes, baseline ensemble | Fig. 2 | Aggregate metrics match |
-| Random local Hamiltonian, 626 rows | Yes, baseline ensemble | Fig. 2 | Aggregate metrics match |
-| Matched N=32 XY, 500 rows | Yes, baseline ensemble | Fig. 2 | Aggregate metrics match |
-| Independent N=32 synthetic, 2,000 rows | Yes, baseline ensemble | Fig. 2 | Aggregate metrics match |
-| General-Sep, 2,000 rows | Yes, baseline ensemble | Fig. 2 | TNR matches |
-| XY temperature traces and certificates | Previously frozen baseline inputs | Fig. 3(a,b) | Plotted; independent certificates preserved |
-| XX thermal decision map and fit | Direct augmented-ensemble grids committed | Fig. 3(c,d) | Plotted; fit matches |
+| Experiment | Public source | Model inference | Figure | Result |
+| --- | --- | --- | --- | --- |
+| XXZ adaptive Gibbs, 343 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | Aggregate metrics match |
+| J1–J2 adaptive Gibbs, 463 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | Aggregate metrics match |
+| Random local Hamiltonian, 626 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | Aggregate metrics match |
+| Matched N=32 XY, 500 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | Aggregate metrics match |
+| Independent N=32 synthetic, 2,000 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | Aggregate metrics match |
+| General-Sep, 2,000 rows | Release HDF5 | Baseline ensemble verified | Fig. 2 | TNR matches |
+| XY temperature traces and certificates | Committed compact data | Frozen baseline scores | Fig. 3(a,b) | Plotted; independent certificates preserved |
+| XX thermal decision map and fit | Committed compact data | Frozen augmented predictions | Fig. 3(c,d) | Plotted; fit matches |
 
 The six benchmark HDF5 files were checked by SHA-256 and class counts before
 inference. From the fresh GitHub clone they were extracted by the public
@@ -31,8 +34,12 @@ reference numbers, the maximum absolute metric difference was `1.61e-5`
 (J1–J2 E2 recall); all other differences were at most `8.74e-6`. The counts
 of unknown rows were 79, 168, 222, 48, 0, and 0 in the table's order.
 Unknown rows were excluded. The six-file archive was built, verified, and
-installed using `scripts/download_benchmarks.py --archive-file ...`; the
-public network-download path awaits the external asset URL.
+installed using `scripts/download_benchmarks.py --archive-file ...`. It was
+also downloaded anonymously in the separate public-release check with the default
+`python scripts/download_benchmarks.py --data-root outputs/public_download_check`
+command, SHA-256 verified and installed, then used for all six fresh benchmark
+reports under `outputs/public_benchmarks/`. Running the downloader again
+correctly skipped every verified file.
 
 Both `plot_fig2.py` and `plot_fig3.py` completed in the fresh clone with only
 compact committed sources and wrote PDFs to `outputs/figures/`. Fig. 3(c,d) uses 4,941 base-grid
@@ -62,9 +69,7 @@ test redrew the committed direct predictions without expensive recomputation.
 
 ## Limits
 
-The external benchmark asset is not yet live, so a clean clone cannot perform
-the network-download step until the Release is uploaded and the manifest URL
-is updated. Full 50,000-row primary-data generation, all selector training,
+Full 50,000-row primary-data generation, all selector training,
 and full three-seed retraining were not repeated. The original training-time
 Git commit remains unknown; the public implementation is supported by strict
 checkpoint loading and saved-score compatibility, not byte-identical code

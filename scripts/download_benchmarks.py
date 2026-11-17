@@ -1,7 +1,6 @@
 """Download and verify the six paper benchmark HDF5 files.
 
-The release URL is read from data/benchmark_manifest.json. Until the data
-release is published, use --archive-file with the verified local package.
+The public release URL is read from data/benchmark_manifest.json.
 """
 from __future__ import annotations
 
@@ -10,11 +9,14 @@ import hashlib
 import json
 import os
 import shutil
+import ssl
 import sys
 import tarfile
 import urllib.error
 import urllib.request
 from pathlib import Path
+
+import certifi
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +48,8 @@ def valid(path: Path, entry: dict) -> bool:
 def download(url: str, destination: Path, expected_size: int) -> None:
     request = urllib.request.Request(url, headers={"User-Agent": "EntNet-benchmark-downloader/1"})
     try:
-        with urllib.request.urlopen(request, timeout=60) as response, destination.open("wb") as output:
+        tls_context = ssl.create_default_context(cafile=certifi.where())
+        with urllib.request.urlopen(request, timeout=60, context=tls_context) as response, destination.open("wb") as output:
             transferred = 0
             while block := response.read(1024 * 1024):
                 output.write(block)

@@ -59,9 +59,10 @@ checkpoint hashes, Hamiltonian, grid, threshold, and activated-fit diagnostics:
 
 `data/benchmark_manifest.json` identifies the six final HDF5 files by
 SHA-256, byte size, class counts, input schema, generator, and paper result.
-Their prepared package is outside Git history and awaits an externally
-published asset. The base Dv1-only ensemble was independently rerun on all
-six preserved HDF5 files; aggregate paper metrics match. The public
+Their package is outside Git history and available from the public
+[`benchmarks-v1` Release](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/releases/tag/benchmarks-v1).
+The base Dv1-only ensemble was independently rerun on all six HDF5 files
+downloaded from that Release; aggregate paper metrics match. The public
 `scripts/reproduce_benchmarks.py` uses only those files, the manifest, and
 released checkpoints, with no private prior-score or preservation-manifest
 dependency. Per-row values in some older saved score tables are not bitwise

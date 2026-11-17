@@ -2,7 +2,7 @@
   "schema_version": 1,
   "archive": {
     "asset_name": "entnet-benchmarks-v1.tar.gz",
-    "url": null,
+    "url": "https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/releases/download/benchmarks-v1/entnet-benchmarks-v1.tar.gz",
     "sha256": "dc8bf42f7ac56b97f1f477a86e0300bd7f35ca14727522211cd4bad9a96027ca",
     "size_bytes": 108648418
   },

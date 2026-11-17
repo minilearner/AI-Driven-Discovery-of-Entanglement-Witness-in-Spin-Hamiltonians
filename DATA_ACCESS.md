@@ -2,10 +2,9 @@
 
 The six HDF5 files below are the exact final test sets used for the paper's
 system-size, synthetic-state, separable-control, and unseen-Hamiltonian
-results. They are **not in Git history**. Their single archive has been built
-and verified locally; publication of its external release asset is pending.
-The `archive.url` in `data/benchmark_manifest.json` is therefore `null`.
-No public download is claimed until a real asset URL has been verified.
+results. They are **not in Git history**. The single archive is published as
+[GitHub Release benchmarks-v1](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/releases/tag/benchmarks-v1).
+The real public asset URL is recorded in `data/benchmark_manifest.json`.
 
 | Benchmark | Path after installation | Rows | Size (MB) | Classes (Sep/E2/E3/E4/Unknown) |
 | --- | --- | ---: | ---: | --- |
@@ -27,13 +26,13 @@ personal paths. The package contains 5,932 rows; its compressed size is
 
 ## Install and verify
 
-After the external asset is published and its URL entered into the manifest:
+Download the public archive, verify it, and install all six datasets:
 
 ```bash
 python scripts/download_benchmarks.py
 ```
 
-Until then, a holder of the verified archive can use:
+If the verified archive is already available locally, use:
 
 ```bash
 python scripts/download_benchmarks.py --archive-file /path/to/entnet-benchmarks-v1.tar.gz

@@ -43,7 +43,7 @@ If a short clone path is unavailable, the following dependency-only install
 was also verified. Set the source path for scripts that import the package:
 
 ```powershell
-python -m pip install torch numpy h5py PyYAML psutil scipy 'scikit-learn>=1.5,<2' pandas matplotlib pfapack pytest
+python -m pip install torch numpy h5py PyYAML psutil scipy 'scikit-learn>=1.5,<2' pandas matplotlib pfapack certifi pytest
 $env:PYTHONPATH = (Resolve-Path 'src').Path
 ```
 
@@ -71,19 +71,19 @@ Their verified paths, per-file SHA-256 values, labels, schemas, and provenance
 are in [`data/benchmark_manifest.json`](data/benchmark_manifest.json) and
 [`DATA_ACCESS.md`](DATA_ACCESS.md). They are deliberately outside Git history.
 
-The data package has been prepared and locally tested, but **its public release
-asset is not yet published**. Until the manifest contains a live URL, the
-default download command gives an explicit error. A holder of the verified
-package can install it now:
-
-```bash
-python scripts/download_benchmarks.py --archive-file /path/to/entnet-benchmarks-v1.tar.gz
-```
-
-Once the public asset is released and the manifest updated, the command is:
+The verified data package is published as a
+[GitHub Release](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/releases/tag/benchmarks-v1).
+Download and verify all six files with:
 
 ```bash
 python scripts/download_benchmarks.py
+```
+
+If you already have the release archive, use the same verifier without
+downloading it again:
+
+```bash
+python scripts/download_benchmarks.py --archive-file /path/to/entnet-benchmarks-v1.tar.gz
 ```
 
 Both routes check archive and individual HDF5 SHA-256 hashes, skip verified
