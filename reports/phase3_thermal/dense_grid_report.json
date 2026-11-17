@@ -1,6 +1,6 @@
 {
-  "route": "Dv1+R2Support only",
-  "model": "new appendix-control ensemble",
+  "route": "Dv1+R2Support",
+  "model": "Distance-two-augmented EntNet",
   "N": 16,
   "gamma": 0,
   "boundary_condition": "PBC",
@@ -20,6 +20,6 @@
       "seed_disagreement_fraction": 0.5358021990044308
     }
   ],
-  "total_new_grid_points": 48632,
-  "source": "direct exact XY features and three frozen checkpoints; no interpolation"
+  "source": "direct exact XY features and three frozen checkpoints; no interpolation",
+  "total_direct_grid_points": 48632
 }

@@ -1,11 +1,13 @@
-"""Regenerate manuscript Figs. 2 and 3 from frozen selector and score tables.
+"""Regenerate manuscript Fig. 2 and appendix controls from frozen tables.
 
 The script changes presentation only. It does not refit models, rerank channels,
-or alter the saved benchmark and intervention probabilities. Figure 3(b) reads
-the separately audited Dv1-only rerun of the frozen r=4 channel ablation.
+or alter the saved benchmark and intervention probabilities. The appendix
+r=4 ablation reads the separately audited Dv1-only rerun.
 """
 
 from __future__ import annotations
+
+import argparse
 
 import csv
 import json
@@ -27,6 +29,8 @@ from generate_fig4_probability_violins import (
 
 
 HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+OUTPUT = ROOT / "outputs/figures/structural"
 DATA = HERE.parent / "data"
 SOURCE = HERE / "combined_structural_lu_controls_source.csv"
 SELECTION = DATA / "joint_channel_selection_summary.json"
@@ -353,7 +357,7 @@ def make_fig2(rows: list[dict[str, str]]) -> None:
     fig.legend(handles=[Patch(color=color, label=label) for _, label, color in MODELS],
                loc="center", bbox_to_anchor=(0.60, 0.340), ncol=3,
                frameon=False, columnspacing=1.5, handlelength=1.1)
-    base = HERE / "combined_structural_lu_controls"
+    base = OUTPUT / "combined_structural_lu_controls"
     if ax_b_rank.get_xlim() != ax_b_budget.get_xlim():
         raise AssertionError("composite panel b must share its rank/K limits")
     require_matplotlib_panel_alignment(
@@ -459,7 +463,7 @@ def make_fig3(rows: list[dict[str, str]]) -> None:
                                0.5 * (legend_band.y0 + legend_band.y1) + 0.020),
                ncol=3, frameon=False,
                handlelength=1.1, columnspacing=0.7, fontsize=7.3)
-    base = HERE / "joint_k16_structural_interventions"
+    base = OUTPUT / "joint_k16_structural_interventions"
     require_matplotlib_panel_alignment(
         fig, axes=axes, panel_ids={ax: label for ax, label in zip(axes, "abcdef")},
         json_out=str(base.with_suffix(".alignment-layout.json")),
@@ -472,6 +476,16 @@ def make_fig3(rows: list[dict[str, str]]) -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    parser.add_argument("--force", action="store_true", help="Replace existing figure outputs")
+    args = parser.parse_args()
+    OUTPUT = args.output
+    if not args.force and any((OUTPUT / name).exists() for name in
+                              ("combined_structural_lu_controls.pdf",
+                               "joint_k16_structural_interventions.pdf")):
+        parser.error(f"figure output exists in {OUTPUT}; choose --output elsewhere or --force")
+    OUTPUT.mkdir(parents=True, exist_ok=True)
     style()
     frozen = source_rows()
     make_fig2(frozen)

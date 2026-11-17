@@ -1,0 +1,47 @@
+{
+  "N": 32,
+  "num_samples": 2000,
+  "master_seed": 20260820,
+  "class_counts": {
+    "strict_separable": 400,
+    "E2": 400,
+    "E3": 600,
+    "E4": 600
+  },
+  "family_counts": {
+    "random_product": 100,
+    "classical_correlated_separable_mixture": 150,
+    "noisy_separable_mixture": 150,
+    "bell_pair_embedding": 150,
+    "finite_depth_random_circuit": 150,
+    "thermal_entangled_pair": 100,
+    "white_noise_path_E3": 200,
+    "product_endpoint_path_E3": 200,
+    "diversity_repaired_E3": 200,
+    "cluster_like_star_graph_E4": 200,
+    "random_circuit_multipartite_E4": 200,
+    "dephased_multipartite_E4": 200
+  },
+  "certificate_policy": {
+    "E2": "all C(32,2) pair RDMs, strict NPT",
+    "E3": "only after no E2; 30 contiguous triple RDMs, NPT or CCNR",
+    "E4": "only after no E2 and no E3; 29 contiguous four-site RDMs, NPT or CCNR",
+    "tol_pt": 1e-6,
+    "tol_ccnr": 1e-6,
+    "minimum_accepted_certificate_margin": 1e-5
+  },
+  "observable_schema": {
+    "T1": [2000, 32, 3],
+    "T2": [2000, 32, 4, 3, 3],
+    "T3": [2000, 32, 3, 3, 3],
+    "T4": [2000, 32, 3, 3, 3, 3],
+    "T2_distances": [1, 2, 3, 4],
+    "wraparound_observables": false,
+    "raw_physical_scalars_per_state": 4317,
+    "derived_K2_K3_scalars_per_state": 1872
+  },
+  "state_representation": "exact block-local states with at most four entangled qubits, or constructive fully separable product mixtures",
+  "dense_2_power_32_constructed": false,
+  "unknown_as_negative": false,
+  "exact5000_accessed": false
+}

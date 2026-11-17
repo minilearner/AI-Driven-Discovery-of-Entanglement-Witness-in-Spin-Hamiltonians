@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "archive": {
+    "asset_name": "entnet-benchmarks-v1.tar.gz",
+    "url": null,
+    "sha256": "dc8bf42f7ac56b97f1f477a86e0300bd7f35ca14727522211cd4bad9a96027ca",
+    "size_bytes": 108648418
+  },
+  "files": [
+    {
+      "id": "XXZ",
+      "path": "xxz/dataset.h5",
+      "sha256": "aef4d0fd39333c6d26b07ef7cecb935263e0039836bd8e4a9a577d39fbe86c25",
+      "size_bytes": 454888,
+      "samples": 343,
+      "labels": {
+        "strict_separable": 79,
+        "E2": 103,
+        "E3": 52,
+        "E4": 30,
+        "unknown": 79
+      },
+      "description": "N=16 XXZ adaptive Gibbs states",
+      "paper_experiment": "Cross-Hamiltonian generalization",
+      "generator": "scripts/generate_adaptive_gibbs_ood.py",
+      "schema": "adaptive",
+      "paper_metrics": {
+        "AUROC": 1.0,
+        "E2_recall": 0.9903,
+        "E3_recall": 1.0,
+        "E4_recall": 1.0,
+        "TNR": 1.0
+      },
+      "source": "data/adaptive_gibbs_ood_n16_v1/xxz/dataset.h5"
+    },
+    {
+      "id": "J1-J2",
+      "path": "j1j2/dataset.h5",
+      "sha256": "7fa84377775fe5db71bf0f3f63b5fb857d9d46435a03de4e54520e036c274aeb",
+      "size_bytes": 720386,
+      "samples": 463,
+      "labels": {
+        "strict_separable": 30,
+        "E2": 155,
+        "E3": 80,
+        "E4": 30,
+        "unknown": 168
+      },
+      "description": "N=16 J1-J2 adaptive Gibbs states",
+      "paper_experiment": "Cross-Hamiltonian generalization",
+      "generator": "scripts/generate_adaptive_gibbs_ood.py",
+      "schema": "adaptive",
+      "paper_metrics": {
+        "AUROC": 1.0,
+        "E2_recall": 0.8645,
+        "E3_recall": 1.0,
+        "E4_recall": 1.0,
+        "TNR": 1.0
+      },
+      "source": "data/adaptive_gibbs_ood_n16_v1/j1j2/dataset.h5"
+    },
+    {
+      "id": "Random-local-H",
+      "path": "random_local_h/dataset.h5",
+      "sha256": "ff787da47d9a795b7cc2086c552dbdd02d9fb1db39aafb26fdd6cc269bb71dbe",
+      "size_bytes": 2163454,
+      "samples": 626,
+      "labels": {
+        "strict_separable": 39,
+        "E2": 238,
+        "E3": 87,
+        "E4": 40,
+        "unknown": 222
+      },
+      "description": "N=16 random-local-H adaptive Gibbs states",
+      "paper_experiment": "Cross-Hamiltonian generalization",
+      "generator": "scripts/generate_adaptive_gibbs_ood.py",
+      "schema": "adaptive",
+      "paper_metrics": {
+        "AUROC": 1.0,
+        "E2_recall": 1.0,
+        "E3_recall": 1.0,
+        "E4_recall": 1.0,
+        "TNR": 1.0
+      },
+      "source": "data/adaptive_gibbs_ood_n16_v1/dh_family/dataset.h5"
+    },
+    {
+      "id": "N32-XY",
+      "path": "n32_xy/dataset.h5",
+      "sha256": "718023a40493fbee81ee4cf5df356b08eb7ff5c585bb3755b37a0db7ba2bfa51",
+      "size_bytes": 3029734,
+      "samples": 500,
+      "labels": {
+        "strict_separable": 20,
+        "E2": 312,
+        "E3": 80,
+        "E4": 40,
+        "unknown": 48
+      },
+      "description": "N=32 matched periodic XY Gibbs states",
+      "paper_experiment": "System-size generalization",
+      "generator": "scripts/generate_xy_n32_size_transfer.py",
+      "schema": "xy32",
+      "paper_metrics": {
+        "AUROC": 1.0,
+        "E2_recall": 1.0,
+        "E3_recall": 1.0,
+        "E4_recall": 1.0,
+        "TNR": 1.0
+      },
+      "source": "data/xy_n32_pbc_matched_exact500_v1/dataset.h5"
+    },
+    {
+      "id": "N32-synthetic",
+      "path": "n32_synthetic/dataset.h5",
+      "sha256": "14a8f12925808bde7501454d780b72908dca0d6c28b3496dce3555f8f4293d73",
+      "size_bytes": 45307883,
+      "samples": 2000,
+      "labels": {
+        "strict_separable": 400,
+        "E2": 400,
+        "E3": 600,
+        "E4": 600,
+        "unknown": 0
+      },
+      "description": "N=32 independently constructed synthetic states",
+      "paper_experiment": "Pairwise-invisible and higher-order generalization",
+      "generator": "scripts/generate_dpi_n32_general.py",
+      "schema": "synthetic32",
+      "paper_metrics": {
+        "AUROC": 0.99984375,
+        "E2_recall": 0.9875,
+        "E3_recall": 0.9666666666666667,
+        "E4_recall": 1.0,
+        "TNR": 1.0
+      },
+      "source": "data/dpi_n32_general_v1/D_PI_N32.h5"
+    },
+    {
+      "id": "General-Sep",
+      "path": "general_sep/dataset.h5",
+      "sha256": "25e5934b613d96c6d0c472ae4eb190273e25886ad141b72106df2167ca6468e8",
+      "size_bytes": 64643979,
+      "samples": 2000,
+      "labels": {
+        "strict_separable": 2000,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "unknown": 0
+      },
+      "description": "N=32 constructive separable mixtures",
+      "paper_experiment": "False-positive control",
+      "generator": "scripts/generate_general_separable_ood.py",
+      "schema": "separable32",
+      "paper_metrics": {
+        "TNR": 0.997
+      },
+      "source": "data/general_separable_ood_n32_v1/dataset.h5"
+    }
+  ]
+}

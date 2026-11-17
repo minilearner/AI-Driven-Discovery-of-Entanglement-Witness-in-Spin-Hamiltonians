@@ -19,3 +19,11 @@ jobs:
         run: python -m pytest -q tests
       - name: Frozen-model inference example
         run: python scripts/infer_example.py
+      - name: Physical state to score example
+        run: python scripts/physical_example.py
+      - name: Small HDF5 benchmark and metric check
+        run: |
+          python scripts/evaluate_final.py --dataset tests/fixtures/physical_smoke_n16.h5 --output outputs/ci_smoke_evaluation.json
+          python -c "import json; r=json.load(open('outputs/ci_smoke_evaluation.json')); assert r['rows']==24 and r['known_rows']==24 and r['AUROC']==1.0 and r['E2_recall']==1.0 and r['TNR']==1.0 and r['threshold']==0.5"
+      - name: One-epoch final training route smoke
+        run: python scripts/smoke_train_dv1.py

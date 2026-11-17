@@ -1,5 +1,5 @@
 {
-  "model": "new Dv1+R2Support appendix-control ensemble",
+  "model": "Distance-two-augmented EntNet",
   "N": 16,
   "gamma": 0.0,
   "hamiltonian": "H=-sum_i[(1+gamma)/2 XiXi+1+(1-gamma)/2 YiYi+1+h Zi]",
@@ -49,13 +49,12 @@
     "h_min": 1.05,
     "h_max": 1.5
   },
-  "old_grid_comparison": {
-    "max_abs_p_difference": 0.8954320984251187,
-    "mean_abs_p_difference": 0.05950397323565386,
-    "decision_disagreement_fraction": 0.07468123861566485
-  },
-  "trajectory_points": 6,
   "elapsed_seconds": 772.7947096000426,
   "threshold": 0.5,
-  "old_probabilities_used_as_input": false
+  "training_route": "Dv1+R2Support",
+  "training_sources": [
+    "D_v1",
+    "R2Support"
+  ],
+  "feature_manifest": "configs/joint_K16.json"
 }

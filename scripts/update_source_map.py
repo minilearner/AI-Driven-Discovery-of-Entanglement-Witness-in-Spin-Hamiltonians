@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import fnmatch
 import hashlib
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,11 +47,13 @@ def main() -> None:
     with MAP.open(newline="", encoding="utf-8") as stream:
         previous = {row["release_path"]: row for row in csv.DictReader(stream)}
     rows = []
-    for path in sorted(p for p in ROOT.rglob("*") if p.is_file() and p != MAP
-                       and not any(part in {".git", ".venv", "__pycache__", ".pytest_cache"}
-                                   for part in p.relative_to(ROOT).parts)
-                       and p.suffix not in {".pyc", ".pyo"}):
-        relative = path.relative_to(ROOT).as_posix()
+    listed = subprocess.check_output(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT
+    ).decode("utf-8").split("\0")
+    for relative in sorted(filter(None, listed)):
+        path = ROOT / relative
+        if not path.is_file() or path == MAP:
+            continue
         if any(fnmatch.fnmatch(relative, pattern) for pattern in GENERATED):
             continue
         digest = sha256(path)
@@ -67,7 +70,7 @@ def main() -> None:
                      "origin_sha256": source_digest,
                      "byte_identical": str(bool(origin and digest == source_digest)).lower()})
     with MAP.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=FIELDS)
+        writer = csv.DictWriter(stream, fieldnames=FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     print(f"source map refreshed: {len(rows)} mapped files")

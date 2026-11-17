@@ -1,0 +1,37 @@
+{
+  "N": 32,
+  "num_samples": 500,
+  "model": "finite-size XY chain",
+  "boundary_condition": "PBC",
+  "matched_source": "data/xy_n16_pbc_exact500_v1/dataset.h5",
+  "matched_parameter_fields": ["sample_id", "gamma", "h", "T", "beta", "sample_seed", "stratum"],
+  "raw_schema": {
+    "T1": {"shape": [500, 32, 3], "physical_scalars": 96},
+    "T2": {"shape": [500, 32, 4, 3, 3], "mask_shape": [500, 32, 4], "R_obs": 4, "physical_scalars": 1062},
+    "T3": {"shape": [500, 32, 3, 3, 3], "mask_shape": [500, 32], "physical_scalars": 810},
+    "T4": {"shape": [500, 32, 3, 3, 3, 3], "mask_shape": [500, 32], "physical_scalars": 2349},
+    "total_physical_scalars": 4317,
+    "wraparound_observables": false
+  },
+  "derived": {
+    "K2": {"shape": [500, 32, 4, 3, 3], "scalars": 1062},
+    "strict_centered_K3": {"shape": [500, 32, 3, 3, 3], "scalars": 810},
+    "counted_as_new_raw_measurements": false
+  },
+  "state_backend": "finite free fermion with exact finite-PBC parity projection",
+  "dense_2_power_32_constructed": false,
+  "thermodynamic_limit_formula_used": false,
+  "certificate_tolerances": {"PT": 1e-9, "CCNR": 1e-9},
+  "certificate_subsystems": {
+    "E2": "all C(32,2), compressed by 16 exact cyclic translation orbits",
+    "E3": "all C(32,3), compressed by 155 exact cyclic translation orbits",
+    "E4": "all C(32,4), compressed by 1128 exact cyclic translation orbits"
+  },
+  "hierarchy": ["strict_separable_construction", "E2_NPT", "E3_NPT_or_CCNR", "E4_NPT_or_CCNR", "unknown"],
+  "higher_certificates_after_first_detection": "not_evaluated",
+  "unknown_binary_role": "excluded",
+  "production_command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python scripts/generate_xy_n32_size_transfer.py --progress-every 5 --workers 8",
+  "production_workers": 8,
+  "remote_extra_dependency": "pfapack==0.3.1",
+  "exact5000_accessed": false
+}

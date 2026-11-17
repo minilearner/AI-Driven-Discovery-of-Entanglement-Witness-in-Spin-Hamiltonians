@@ -1,0 +1,44 @@
+system:
+  N: 16
+  boundary: OBC
+dataset:
+  max_pairs: 1000
+  family_id: random_local_hamiltonian_ground_state
+  master_seed: 5162026
+hamiltonian:
+  field_range: [1.0, 1.5]
+  commuting_coupling_range: [-0.15, 0.15]
+  field_safety_margin: 0.25
+  profile_probabilities:
+    disordered: 0.40
+    weakly_homogeneous: 0.30
+    smooth: 0.30
+  lambda_mixture:
+    weak: [0.10, 0.30, 0.30]
+    moderate: [0.30, 0.80, 0.50]
+    strong: [0.80, 1.50, 0.20]
+  lambda_retry_factor: 1.5
+  lambda_max: 2.0
+  max_attempts: 4
+solver:
+  name: tenpy_two_site_dmrg_random_local_obc
+  chi_max: 128
+  svd_min: 1.0e-10
+  max_sweeps: 30
+  energy_tol: 1.0e-10
+acceptance:
+  max_schmidt_entropy_min: 0.02
+  entangled_cut_entropy_min: 0.005
+  entangled_cuts_min: 3
+  npt_tolerance: 1.0e-9
+runtime:
+  torch_threads: 1
+  checkpoint_every_pairs: 1
+  OMP_NUM_THREADS: 1
+  MKL_NUM_THREADS: 1
+  OPENBLAS_NUM_THREADS: 1
+constraints:
+  exact500_role: development_only
+  exact5000_loaded_for_modeling: false
+  hard_concrete_enabled: false
+  five_body_certification: false

@@ -1,0 +1,55 @@
+{
+  "experiment": "Local Inv123 plus contiguous raw-T4 LU invariants",
+  "representation": {
+    "old_physical_channels": 77,
+    "raw_T4_candidate_channels": 40,
+    "mask_channels": 5,
+    "full_input_width": 122,
+    "raw_T4_families": {
+      "Frobenius": 1,
+      "1|3_unfolding_singular_values": 12,
+      "2|2_unfolding_singular_values": 27
+    },
+    "K4_included": false,
+    "connected_four_body_included": false,
+    "raw_81_components_included": false
+  },
+  "architecture": {
+    "d_model": 128,
+    "layers": 4,
+    "heads": 4,
+    "dim_feedforward": 192,
+    "dropout": 0.1,
+    "position_encoding": "RoPE on Q/K",
+    "pooling": "CLS"
+  },
+  "selector": {
+    "seeds": [2026090301, 2026090302, 2026090303, 2026090304, 2026090305],
+    "T4_only_target": 16,
+    "joint_target": 32,
+    "max_epochs": 160,
+    "patience": 20,
+    "warmup_epochs": 25
+  },
+  "training": {
+    "seeds": [20260829, 20260830, 20260831],
+    "batch_size": 256,
+    "eval_batch_size": 512,
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "max_epochs": 120,
+    "patience": 15,
+    "scheduler_patience": 4,
+    "gradient_clip": 5.0,
+    "checkpoint_selection": "minimum canonical N16 validation BCE only"
+  },
+  "fixed_old16_T4_additions": [0, 2, 4, 8, 16, 40],
+  "joint_budgets": [16, 20, 24, 32, 48, 117],
+  "safeguards": {
+    "historical_exact500_read_only": true,
+    "exact5000_accessed": false,
+    "N32_used_for_training_or_selection": false,
+    "N32_finetuned": false,
+    "unknown_as_negative": false
+  }
+}

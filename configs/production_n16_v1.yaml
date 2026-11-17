@@ -1,0 +1,54 @@
+master_seed: 20260809
+
+system:
+  N: 16
+
+runtime:
+  device: cpu
+  progress_every: 100
+  parallel_workers: 2
+  keep_shards: false
+
+dataset:
+  num_separable: 25000
+  num_entangled: 25000
+  pilot_num_separable: 2000
+  pilot_num_entangled: 2000
+  output_dir: data/n16_production_v1
+
+features:
+  connected: false
+
+separable:
+  type_proportions:
+    product_state: 0.20
+    separable_convex_mixture: 0.70
+    classical_ghz_mixture: 0.10
+  K_integer_range: [2, 32]
+  log10_alpha_range: [-1.0, 1.0]
+
+entangled:
+  chi_integer_range: [2, 16]
+  noise_types: [dephasing, depolarizing, amplitude_damping]
+  noise_regime_proportions:
+    easy: 0.25
+    intermediate: 0.40
+    near_boundary: 0.35
+  noise_regime_boundary_fraction_ranges:
+    easy: [0.05, 0.55]
+    intermediate: [0.55, 0.90]
+    near_boundary: [0.90, 0.995]
+  boundary_bisection_steps: 9
+  max_candidate_multiplier: 8
+
+certification:
+  max_distance: 2
+  tolerance: 1.0e-9
+
+splits:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+pilot_gate:
+  max_single_metric_auc_separation: 0.90

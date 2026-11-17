@@ -1,8 +1,7 @@
-"""Recompute XY thermal response with the *new* Dv1+R2Support ensemble.
+"""Recompute XY thermal response with distance-two-augmented EntNet.
 
-This program never reads old model probabilities as input. It reconstructs
-thermal Pauli correlations from the exact XY backend for every grid point.
-The original paper and figure files are left untouched.
+Thermal Pauli correlations are reconstructed by the exact XY backend at every
+grid point. Generated files are written under outputs/ by default.
 """
 from __future__ import annotations
 
@@ -103,15 +102,17 @@ def save_rows(path: Path, rows: list[dict]) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--output", type=Path, default=ROOT / "reports/phase3_thermal")
+    ap.add_argument("--output", type=Path, default=ROOT / "outputs/thermal")
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--threads", type=int, default=4)
     ap.add_argument("--h-count", type=int, default=61)
     ap.add_argument("--temperature-count", type=int, default=81)
     ap.add_argument("--refinement-rounds", type=int, default=8)
-    ap.add_argument("--old-grid", type=Path)
-    ap.add_argument("--trajectory-source", type=Path)
+    ap.add_argument("--force", action="store_true", help="Replace existing thermal outputs")
     args = ap.parse_args()
+    if not args.force and any((args.output / name).exists() for name in
+                              ("new_grid.npz", "thermal_report.json", "new_boundaries.csv")):
+        ap.error(f"output exists in {args.output}; choose --output elsewhere or --force")
     args.output.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(args.threads)
     models = load_control_ensemble(ROOT, device=args.device)
@@ -149,38 +150,12 @@ def main() -> None:
     low = [row for row in boundaries if 1.05 - 1e-9 <= row["h"] <= 1.5 + 1e-9
            and row["temperature"] < 1]
     fit = fit_activated(np.array([r["h"] for r in low]), np.array([r["temperature"] for r in low])) if len(low) >= 3 else None
-    old = None
-    if args.old_grid:
-        with np.load(args.old_grid) as source:
-            old_h, old_t = source["h"], source["temperature"]
-            old_p = 1 / (1 + np.exp(-np.clip(source["ensemble_logit"], -60, 60)))
-        if np.allclose(h_values, old_h) and np.allclose(temperatures, old_t):
-            old = {"max_abs_p_difference": float(np.max(np.abs(p_grid - old_p))),
-                   "mean_abs_p_difference": float(np.mean(np.abs(p_grid - old_p))),
-                   "decision_disagreement_fraction": float(np.mean((p_grid >= .5) != (old_p >= .5)))}
-    trajectory_rows = []
-    if args.trajectory_source:
-        with args.trajectory_source.open(newline="", encoding="utf-8") as stream:
-            input_rows = list(csv.DictReader(stream))
-        points = sorted({(r["point_id"], float(r["gamma"]), float(r["h"])) for r in input_rows
-                         if r["point_id"] != "factorization_line"})
-        for point, gamma, h in points:
-            backend = XYFreeFermionExactBackend(N, gamma, h, "PBC")
-            rows = [r for r in input_rows if r["point_id"] == point]
-            values = np.stack([tokens(backend, float(r["temperature"]), channels) for r in rows])
-            pseed = predict(models, values, args.device)
-            for r, ps in zip(rows, pseed):
-                trajectory_rows.append({"point_id": point, "gamma": gamma, "h": h,
-                                        "temperature": float(r["temperature"]),
-                                        "certificate_class": r["class_name"],
-                                        "p_old_dv1_only": float(r["ensemble_probability"]),
-                                        "p_new_r2support": float(np.mean(ps)),
-                                        **{f"p_seed_{seed}": float(ps[k]) for k, seed in enumerate(SEEDS)}})
-        save_rows(args.output / "new_trajectories.csv", trajectory_rows)
     seed_disagree = (np.min(seed_grid, axis=2) < .5) & (np.max(seed_grid, axis=2) >= .5)
     h12_index = int(np.argmin(abs(h_values - 1.2)))
     h12_crossings = [r for r in boundaries if abs(r["h"] - 1.2) < 1e-9]
-    report = {"model": "new Dv1+R2Support appendix-control ensemble", "N": 16, "gamma": 0.0,
+    report = {"model": "Distance-two-augmented EntNet", "training_route": "Dv1+R2Support",
+              "training_sources": ["D_v1", "R2Support"], "feature_manifest": "configs/joint_K16.json",
+              "N": 16, "gamma": 0.0,
               "hamiltonian": "H=-sum_i[(1+gamma)/2 XiXi+1+(1-gamma)/2 YiYi+1+h Zi]", "boundary": "PBC",
               "checkpoint_sha256": {str(s): sha256(ROOT / f"checkpoints/dv1_r2support_control/seed{s}/best.pt") for s in SEEDS},
               "grid": {"h_count": len(h_values), "temperature_count": len(temperatures),
@@ -189,10 +164,9 @@ def main() -> None:
                        "h_1p2_low_p": float(p_grid[h12_index, 0]), "h_1p2_max_p": float(p_grid[h12_index].max()),
                        "h_1p2_high_p": float(p_grid[h12_index, -1]),
                        "h_1p2_crossings": h12_crossings},
-              "low_boundary_fit": fit, "old_grid_comparison": old,
-              "trajectory_points": len({r["point_id"] for r in trajectory_rows}),
+              "low_boundary_fit": fit,
               "elapsed_seconds": time.perf_counter() - started,
-              "threshold": 0.5, "old_probabilities_used_as_input": False}
+              "threshold": 0.5}
     (args.output / "thermal_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     plt.rcParams.update({"font.family": "serif", "font.serif": ["Times New Roman"], "font.size": 10})
     fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), constrained_layout=True)
@@ -201,7 +175,7 @@ def main() -> None:
     axes[0].contour(h_values, np.log10(temperatures), p_grid.T, levels=[.5], colors="k", linewidths=1.1)
     axes[0].axvline(1, color="white", lw=1.5, ls="--")
     axes[0].axvline(1.2, color="#ffd200", lw=1.5, ls="--")
-    axes[0].set(xlabel=r"$h/J$", ylabel=r"$\log_{10}(T/J)$", title="(c) New Dv1+R2Support thermal response")
+    axes[0].set(xlabel=r"$h/J$", ylabel=r"$\log_{10}(T/J)$", title="(c) Thermal response")
     fig.colorbar(m, ax=axes[0], label="Classifier output $p$")
     if low:
         h_fit = np.array([r["h"] for r in low])
@@ -211,20 +185,10 @@ def main() -> None:
             c = fit["C_star"]
             fitted_t = 4 * (h_fit - 1) / np.real(lambertw(4 * (h_fit - 1) / (c*c)))
             axes[1].plot(h_fit, np.log10(fitted_t), "--", color="#d97706", label="Activated fit")
-    axes[1].set(xlabel=r"$h/J$", ylabel=r"$\log_{10}(T_*/J)$", title="(d) Recomputed lower boundary")
+    axes[1].set(xlabel=r"$h/J$", ylabel=r"$\log_{10}(T_*/J)$", title="(d) Lower boundary")
     axes[1].legend(fontsize=8)
-    fig.savefig(args.output / "fig3cd_candidate.pdf")
+    fig.savefig(args.output / "thermal_preview.pdf")
     plt.close(fig)
-    if trajectory_rows:
-        fig, ax = plt.subplots(figsize=(6.6, 3.6), constrained_layout=True)
-        for point in sorted({r["point_id"] for r in trajectory_rows}):
-            rows = [r for r in trajectory_rows if r["point_id"] == point]
-            ax.plot([r["temperature"] for r in rows], [r["p_new_r2support"] for r in rows], label=point.replace("_", " "))
-        ax.axhline(.5, ls="--", color=".45")
-        ax.set(xscale="log", xlabel=r"$T/J$", ylabel="Classifier output $p$", ylim=(-.02, 1.02))
-        ax.legend(ncol=2, fontsize=7)
-        fig.savefig(args.output / "new_thermal_trajectories.pdf")
-        plt.close(fig)
     print(json.dumps(report, indent=2), flush=True)
 
 

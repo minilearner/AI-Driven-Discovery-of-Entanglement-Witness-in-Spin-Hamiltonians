@@ -1,8 +1,7 @@
-"""Recompute the paper's six transfer benchmarks from frozen HDF5 inputs.
+"""Recompute six paper benchmarks from public HDF5 data and frozen weights.
 
-The HDF5 files remain in the private local archive; this script writes only
-compact predictions and reports inside the release candidate. Unknown states
-never enter classification metrics. The old 312-row OOD datasets are excluded.
+Input schemas and hashes come from data/benchmark_manifest.json. Unknown states
+never enter labeled metrics; the decision threshold is fixed at p=0.5.
 """
 from __future__ import annotations
 
@@ -27,27 +26,14 @@ from entanglement_data.ml.invariant_transformer import (  # noqa: E402
 )
 
 SEEDS = (20260829, 20260830, 20260831)
-SPECS = {
-    "XXZ": ("data/adaptive_gibbs_ood_n16_v1/xxz/dataset.h5", "adaptive"),
-    "J1-J2": ("data/adaptive_gibbs_ood_n16_v1/j1j2/dataset.h5", "adaptive"),
-    "Random-local-H": ("data/adaptive_gibbs_ood_n16_v1/dh_family/dataset.h5", "adaptive"),
-    "N32-XY": ("data/xy_n32_pbc_matched_exact500_v1/dataset.h5", "xy32"),
-    "N32-synthetic": ("data/dpi_n32_general_v1/D_PI_N32.h5", "synthetic32"),
-    "General-Sep": ("data/general_separable_ood_n32_v1/dataset.h5", "separable32"),
-}
-PAPER = {
-    "XXZ": {"AUROC": 1.0, "E2_recall": 0.9903, "E3_recall": 1.0, "E4_recall": 1.0, "TNR": 1.0},
-    "J1-J2": {"AUROC": 1.0, "E2_recall": 0.8645, "E3_recall": 1.0, "E4_recall": 1.0, "TNR": 1.0},
-    "Random-local-H": {"AUROC": 1.0, "E2_recall": 1.0, "E3_recall": 1.0, "E4_recall": 1.0, "TNR": 1.0},
-    "N32-XY": {"AUROC": 1.0, "E2_recall": 1.0, "E3_recall": 1.0, "E4_recall": 1.0, "TNR": 1.0},
-    "N32-synthetic": {"AUROC": 0.99984375, "E2_recall": 0.9875, "E3_recall": 0.9666666666666667, "E4_recall": 1.0, "TNR": 1.0},
-    "General-Sep": {"TNR": 0.997},
-}
-PREVIOUS = {
-    "N32-XY": "analysis/dv1_raw_t4_lu_control_v2/scores/joint_k16_N32_XY.csv",
-    "N32-synthetic": "analysis/dv1_raw_t4_lu_control_v2/scores/joint_k16_N32_DPI.csv",
-    "General-Sep": "analysis/dv1_raw_t4_lu_control_v2/scores/joint_k16_N32_GeneralSep.csv",
-}
+MANIFEST = ROOT / "data/benchmark_manifest.json"
+
+
+def load_manifest(path: Path = MANIFEST) -> list[dict]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1 or len(payload.get("files", [])) != 6:
+        raise ValueError(f"invalid public benchmark manifest: {path}")
+    return payload["files"]
 
 
 def sha256(path: Path) -> str:
@@ -58,21 +44,9 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def expected_hashes(archive: Path) -> dict[str, str]:
-    folder = archive / "reports/remote_preservation_20261106"
-    hashes = {}
-    for filename in ("downloaded_manifest.json", "existing_core_verified.json"):
-        for row in json.loads((folder / filename).read_text(encoding="utf-8")):
-            hashes[row["path"]] = row.get("sha256_local", row.get("sha256"))
-    for name, (relative, _) in SPECS.items():
-        if name == "N32-XY":
-            continue  # locally generated; no server-preservation record
-        if relative not in hashes:
-            raise ValueError(f"no preservation hash for {relative}")
-    return hashes
-
-
 def get_labels(h5: h5py.File, kind: str) -> tuple[np.ndarray, dict[str, np.ndarray], np.ndarray]:
+    if "labels/strict_separable" not in h5:
+        raise ValueError("unsupported HDF5 schema: missing labels/strict_separable; use a published benchmark")
     group = h5["labels"]
     sep = group["strict_separable"][:].astype(bool)
     classes = {key: group[key][:].astype(bool) if key in group else np.zeros(len(sep), bool)
@@ -82,7 +56,7 @@ def get_labels(h5: h5py.File, kind: str) -> tuple[np.ndarray, dict[str, np.ndarr
     for values in classes.values():
         flags += values.astype(int)
     if not np.all(flags == 1):
-        raise ValueError(f"{kind}: labels are not an exclusive partition")
+        raise ValueError(f"{kind}: labels are not an exclusive Sep/E2/E3/E4/Unknown partition")
     if kind == "xy32":
         ids = h5["params/sample_id"][:]
     elif kind in ("synthetic32", "separable32"):
@@ -96,6 +70,8 @@ def get_labels(h5: h5py.File, kind: str) -> tuple[np.ndarray, dict[str, np.ndarr
 
 def selected_batches(h5: h5py.File, kind: str, channels: list[int], batch_size: int):
     if kind == "adaptive":
+        if "features/Joint_K16_inputs" not in h5:
+            raise ValueError("adaptive benchmark requires features/Joint_K16_inputs")
         data = h5["features/Joint_K16_inputs"]
         if data.shape[1:] != (16, 21):
             raise ValueError(f"unexpected adaptive token shape {data.shape}")
@@ -103,6 +79,11 @@ def selected_batches(h5: h5py.File, kind: str, channels: list[int], batch_size: 
             yield data[first:first + batch_size]
         return
     raw = "features" if kind == "xy32" else "raw"
+    required = [f"{raw}/{key}" for key in ("T1", "T2", "T3", "T4", "T2_mask", "T3_mask", "T4_mask")]
+    required += ["derived/K2", "derived/K3"]
+    missing = [key for key in required if key not in h5]
+    if missing:
+        raise ValueError(f"{kind}: missing input fields {missing}; check the published benchmark schema")
     n = len(h5[f"{raw}/T1"])
     for first in range(0, n, batch_size):
         sl = slice(first, first + batch_size)
@@ -126,40 +107,31 @@ def score(models: list[torch.nn.Module], h5: h5py.File, kind: str, channels: lis
             blocks.append(np.column_stack([
                 torch.sigmoid(model(x)).cpu().numpy() for model in models
             ]))
-    return np.concatenate(blocks)
+    return np.concatenate(blocks) if blocks else np.empty((0, len(models)), dtype=np.float32)
 
 
-def previous_difference(archive: Path, name: str, ids: np.ndarray, p: np.ndarray) -> float | None:
-    if name not in PREVIOUS:
-        return None
-    path = archive / PREVIOUS[name]
-    with path.open(newline="", encoding="utf-8") as stream:
-        old = {int(row["sample_id"]): float(row["ensemble_probability"])
-               for row in csv.DictReader(stream)}
-    if len(old) != len(ids) or set(old) != set(map(int, ids)):
-        raise ValueError(f"{name}: saved score IDs do not match current HDF5")
-    return float(np.max(np.abs(p - np.asarray([old[int(i)] for i in ids]))))
-
-
-def evaluate(name: str, archive: Path, output: Path, models: list[torch.nn.Module],
-             channels: list[int], hashes: dict[str, str], batch_size: int) -> dict:
-    relative, kind = SPECS[name]
-    path = archive / relative
-    actual = sha256(path)
-    expected = hashes.get(relative)
-    if expected and actual != expected:
-        raise ValueError(f"{name}: dataset SHA-256 differs from preserved source")
+def evaluate(entry: dict, data_root: Path, output: Path, models: list[torch.nn.Module],
+             channels: list[int], batch_size: int) -> dict:
+    name, kind = entry["id"], entry["schema"]
+    relative = Path(entry["path"])
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(f"unsafe benchmark path: {relative}")
+    path = data_root / relative
+    if not path.is_file():
+        raise FileNotFoundError(f"{name}: {path} is missing; run scripts/download_benchmarks.py")
+    if path.stat().st_size != entry["size_bytes"] or sha256(path) != entry["sha256"]:
+        raise ValueError(f"{name}: HDF5 size/SHA-256 does not match data/benchmark_manifest.json")
     with h5py.File(path, "r") as h5:
         if kind != "adaptive" and not bool(h5.attrs.get("generation_complete", False)):
             raise ValueError(f"{name}: dataset generation not complete")
         sep, classes, ids = get_labels(h5, kind)
         scores = score(models, h5, kind, channels, batch_size)
-    if len(scores) != len(ids) or scores.shape[1] != 3:
-        raise ValueError(f"{name}: prediction shape mismatch")
+    if len(scores) != len(ids) or len(ids) != entry["samples"] or scores.shape[1] != len(SEEDS):
+        raise ValueError(f"{name}: prediction/sample count mismatch")
     p = scores.mean(axis=1).astype(np.float64)
-    known = ~classes["unknown"]
+    known = sep | classes["E2"] | classes["E3"] | classes["E4"]
     ent = classes["E2"] | classes["E3"] | classes["E4"]
-    if known.any() and sep.any() and ent.any():
+    if sep.any() and ent.any():
         auroc = float(roc_auc_score(ent[known], p[known]))
     else:
         auroc = None
@@ -171,9 +143,14 @@ def evaluate(name: str, archive: Path, output: Path, models: list[torch.nn.Modul
     counts = {"total": len(p), "Sep": int(sep.sum()),
               **{key: int(classes[key].sum()) for key in ("E2", "E3", "E4")},
               "Unknown": int(classes["unknown"].sum())}
-    differences = {key: (None if value is None else float(metrics[key] - value))
-                   for key, value in PAPER[name].items() if key in metrics and metrics[key] is not None}
-    old_diff = previous_difference(archive, name, ids, p)
+    expected = entry["labels"]
+    for key, label in (("Sep", "strict_separable"), ("Unknown", "unknown"),
+                       ("E2", "E2"), ("E3", "E3"), ("E4", "E4")):
+        if counts[key] != expected[label]:
+            raise ValueError(f"{name}: {key} count differs from public data manifest")
+    paper = entry["paper_metrics"]
+    differences = {key: float(metrics[key] - value) for key, value in paper.items()
+                   if metrics.get(key) is not None}
     output.mkdir(parents=True, exist_ok=True)
     with (output / f"{name}_scores.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream)
@@ -181,31 +158,50 @@ def evaluate(name: str, archive: Path, output: Path, models: list[torch.nn.Modul
         for i in range(len(p)):
             label = "Sep" if sep[i] else next((key for key in ("E2", "E3", "E4") if classes[key][i]), "Unknown")
             writer.writerow([int(ids[i]), label, float(p[i]), *[float(x) for x in scores[i]]])
-    return {"benchmark": name, "model": "Dv1-only Joint-K16", "dataset": relative,
-            "dataset_sha256": actual, "preservation_hash_match": expected is not None,
-            "counts": counts, "metrics": metrics, "paper_metrics": PAPER[name],
+    return {"benchmark": name, "model": "Baseline EntNet (Dv1-only Joint-K16)",
+            "dataset": relative.as_posix(), "dataset_sha256": entry["sha256"],
+            "counts": counts, "metrics": metrics, "paper_metrics": paper,
             "difference_from_paper": differences,
-            "max_abs_difference_vs_saved_per_row": old_diff,
-            "unknown_excluded": True, "threshold": 0.5}
+            "unknown_excluded": True, "threshold": 0.5,
+            "checkpoint_seeds": list(SEEDS), "feature_manifest": "configs/joint_K16.json"}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--archive-root", type=Path, required=True)
-    parser.add_argument("--output", type=Path, default=ROOT / "reports/phase3_benchmarks")
+    parser.add_argument("--data-root", type=Path, default=ROOT / "data/benchmarks")
+    parser.add_argument("--manifest", type=Path, default=MANIFEST)
+    parser.add_argument("--output", type=Path, default=ROOT / "outputs/benchmarks")
+    parser.add_argument("--benchmark", action="append", help="Run one benchmark by manifest ID; repeatable")
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--force", action="store_true", help="Replace existing output files")
     args = parser.parse_args()
+    if args.batch_size < 1 or args.threads < 1:
+        parser.error("--batch-size and --threads must be positive")
+    all_entries = load_manifest(args.manifest)
+    requested = set(args.benchmark or [entry["id"] for entry in all_entries])
+    valid_names = {entry["id"] for entry in all_entries}
+    if requested - valid_names:
+        parser.error(f"unknown benchmark IDs: {sorted(requested - valid_names)}; use {sorted(valid_names)}")
+    entries = [entry for entry in all_entries if entry["id"] in requested]
+    expected_outputs = [args.output / f"{entry['id']}_scores.csv" for entry in entries]
+    expected_outputs += [args.output / "benchmark_reproduction.json"]
+    if not args.force and any(path.exists() for path in expected_outputs):
+        parser.error(f"output already exists in {args.output}; use --output elsewhere or --force")
+    for entry in entries:
+        path = args.data_root / entry["path"]
+        if not path.is_file():
+            raise FileNotFoundError(f"{entry['id']}: {path} is missing; run scripts/download_benchmarks.py")
     torch.set_num_threads(args.threads)
     models, channels = load_final_ensemble(ROOT)
-    hashes = expected_hashes(args.archive_root)
     reports = []
-    for name in SPECS:
-        result = evaluate(name, args.archive_root, args.output, models, channels, hashes, args.batch_size)
+    for entry in entries:
+        result = evaluate(entry, args.data_root, args.output, models, channels, args.batch_size)
         reports.append(result)
-        print(name, result["counts"], result["metrics"], flush=True)
+        print(entry["id"], result["counts"], result["metrics"], flush=True)
     (args.output / "benchmark_reproduction.json").write_text(
         json.dumps(reports, indent=2) + "\n", encoding="utf-8")
+    print(f"Saved {len(reports)} benchmark reports to {args.output}")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 """Re-evaluate Appendix feature-block interventions on J1-J2 token data.
 
-The Dv1+R2Support checkpoints used here are distinct from the final Dv1-only
-classifier and from the earlier fixed-K16 control used for the thermal grid.
+The Dv1+R2Support checkpoints used here are distinct from the baseline
+Dv1-only classifier.
 Mean replacement is applied only where the corresponding geometry mask is
 valid. Such modified inputs need not describe physical quantum states.
 """
@@ -81,9 +81,12 @@ def _logit(probability: np.ndarray) -> np.ndarray:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path, default=ROOT / "outputs/r2support_interventions.csv")
+    parser.add_argument("--force", action="store_true", help="Replace an existing output")
     parser.add_argument("--batch-size", type=int, default=256)
     args = parser.parse_args()
+    if args.output.exists() and not args.force:
+        parser.error(f"{args.output} exists; choose another --output or use --force")
     with h5py.File(args.dataset, "r") as h5:
         values = h5["features/Joint_K16_inputs"][:]
         class_masks = {

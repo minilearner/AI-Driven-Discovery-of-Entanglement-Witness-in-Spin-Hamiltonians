@@ -1,6 +1,8 @@
 __pycache__/
 .pytest_cache/
 .venv/
+outputs/
+data/benchmarks/
 *.py[cod]
 *.egg-info/
 build/

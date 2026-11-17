@@ -1,7 +1,7 @@
-"""Directly infer denser, displayed XY thermal windows with Dv1+R2Support.
+"""Directly infer displayed XY thermal windows with Dv1+R2Support.
 
 The lower and upper windows match the broken-axis ranges in the paper figure.
-Every plotted cell is evaluated from exact XY correlators and the newer three
+Every plotted cell is evaluated from exact XY correlators and the final three
 checkpoints. Per-field cache files make an interrupted run resumable.
 """
 from __future__ import annotations
@@ -103,13 +103,17 @@ def compute_panel(name: str, fields: np.ndarray, temperatures: np.ndarray,
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=ROOT / "reports/phase3_thermal")
-    parser.add_argument("--cache", type=Path, default=ROOT.parent / "tmp/phase3_dense_cache")
+    parser.add_argument("--output", type=Path, default=ROOT / "outputs/thermal")
+    parser.add_argument("--cache", type=Path, default=ROOT / "outputs/thermal/cache")
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--force", action="store_true", help="Replace completed dense-grid outputs")
     args = parser.parse_args()
-    args.output.mkdir(parents=True, exist_ok=True)
     if args.workers < 1:
-        raise ValueError("workers must be positive")
+        parser.error("--workers must be positive")
+    if not args.force and any((args.output / name).exists() for name in
+                              ("new_dense_lower.npz", "new_dense_upper.npz", "dense_grid_report.json")):
+        parser.error(f"output exists in {args.output}; choose --output elsewhere or --force")
+    args.output.mkdir(parents=True, exist_ok=True)
     # Dense in the two *visible* windows; the hidden middle is not resampled.
     lower_h = np.linspace(1.0, 1.5, 201)
     lower_t = np.geomspace(0.01, 10 ** -0.5, 151)
@@ -117,9 +121,9 @@ def main() -> None:
     upper_t = np.geomspace(10.0, 100.0, 101)
     panels = [compute_panel("lower", lower_h, lower_t, args.cache, args.output, args.workers),
               compute_panel("upper", upper_h, upper_t, args.cache, args.output, args.workers)]
-    report = {"route": "Dv1+R2Support only", "model": "new appendix-control ensemble",
+    report = {"route": "Dv1+R2Support", "model": "Distance-two-augmented EntNet",
               "N": 16, "gamma": 0, "boundary_condition": "PBC",
-              "panels": panels, "total_new_grid_points": sum(p["point_count"] for p in panels),
+              "panels": panels, "total_direct_grid_points": sum(p["point_count"] for p in panels),
               "source": "direct exact XY features and three frozen checkpoints; no interpolation"}
     (args.output / "dense_grid_report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2), flush=True)

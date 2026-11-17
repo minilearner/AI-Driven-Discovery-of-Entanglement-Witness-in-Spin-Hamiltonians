@@ -537,7 +537,6 @@ def make_figure() -> None:
             "d": "activated explanation of the lower entry boundary",
         },
         "fit": fit_metrics,
-        "original_grid_unchanged": True,
         "visible_lower_and_upper_windows_recomputed": True,
         "no_prediction_interpolation": True,
         "interpretation_boundary": (

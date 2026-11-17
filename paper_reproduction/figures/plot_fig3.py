@@ -1,13 +1,13 @@
 """Regenerate the author-adopted Fig. 3 from final compact numerical data.
 
 Panels (a,b) use Dv1-only trajectories and certificates; panels (c,d) use the
-new Dv1+R2Support ensemble. No model retraining occurs in this script.
+final Dv1+R2Support ensemble. No model retraining occurs in this script.
 """
 from __future__ import annotations
 
 import csv
+import argparse
 import json
-import shutil
 from pathlib import Path
 
 import matplotlib
@@ -18,16 +18,17 @@ import numpy as np
 import thermal_layout as template
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "reports/phase3_thermal"
+SOURCE = ROOT / "reports/phase3_thermal"
+OUTPUT = ROOT / "outputs/figures/thermal"
 
 
 def validate_dense_against_base() -> None:
     """Check direct predictions at exactly shared physical grid coordinates."""
-    with np.load(OUTPUT / "new_grid.npz") as base:
+    with np.load(SOURCE / "new_grid.npz") as base:
         base_h, base_t, base_p = base["h"], base["temperature"], base["p"]
     comparisons = {}
     for panel in ("lower", "upper"):
-        with np.load(OUTPUT / f"new_dense_{panel}.npz") as dense:
+        with np.load(SOURCE / f"new_dense_{panel}.npz") as dense:
             h, temperature, probability = dense["h"], dense["temperature"], dense["p"]
         h_pairs = [(i, int(np.argmin(abs(base_h - value)))) for i, value in enumerate(h)]
         t_pairs = [(i, int(np.argmin(abs(base_t - value)))) for i, value in enumerate(temperature)]
@@ -63,13 +64,13 @@ def compatibility_grid(source: Path, destination: Path) -> None:
 
 
 def prepare_sources() -> None:
-    if not (OUTPUT / "dense_grid_report.json").is_file():
-        raise FileNotFoundError("run scripts/recompute_xy_thermal_dense.py first")
+    if not (SOURCE / "dense_grid_report.json").is_file():
+        raise FileNotFoundError(f"missing dense grid report in {SOURCE}")
     for name, destination in (("new_grid.npz", "new_grid_plot.npz"),
                               ("new_dense_lower.npz", "new_dense_lower_plot.npz"),
                               ("new_dense_upper.npz", "new_dense_upper_plot.npz")):
-        compatibility_grid(OUTPUT / name, OUTPUT / destination)
-    with (OUTPUT / "new_boundaries.csv").open(newline="", encoding="utf-8") as stream:
+        compatibility_grid(SOURCE / name, OUTPUT / destination)
+    with (SOURCE / "new_boundaries.csv").open(newline="", encoding="utf-8") as stream:
         rows = list(csv.DictReader(stream))
     with (OUTPUT / "new_boundaries_plot.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=("h", "temperature", "log10_temperature",
@@ -82,7 +83,7 @@ def prepare_sources() -> None:
                              "log10_temperature": row["log10_temperature"],
                              "left_temperature": temperature * 10 ** -half_width,
                              "right_temperature": temperature * 10 ** half_width})
-    fit = json.loads((OUTPUT / "thermal_report.json").read_text())["low_boundary_fit"]
+    fit = json.loads((SOURCE / "thermal_report.json").read_text())["low_boundary_fit"]
     compatible_fit = {"selection": {"h_range": [fit["h_min"], fit["h_max"]]},
                       "models": {"activated": {"C": fit["C_star"], "metrics": {
         "rmse_log10_temperature": fit["RMSE_log10T"],
@@ -126,25 +127,32 @@ def separate_cd() -> None:
 
 def full_figure() -> None:
     template.make_figure()
-    paper_copy = ROOT / "paper_reproduction/figures/xy_thermal_predictions_combined.pdf"
-    shutil.copy2(OUTPUT / "xy_thermal_predictions_combined.pdf", paper_copy)
     path = OUTPUT / "xy_thermal_predictions_combined.manifest.json"
     manifest = json.loads(path.read_text())
     manifest.update({
         "status": "author_adopted_final_figure",
-        "model_by_panel": {"a": "Dv1-only Joint-K16", "b": "model-independent certificates",
-                           "c": "new Dv1+R2Support", "d": "new Dv1+R2Support"},
-        "original_grid_unchanged": False,
+        "model_by_panel": {"a": "Baseline EntNet", "b": "model-independent certificates",
+                           "c": "Distance-two-augmented EntNet", "d": "Distance-two-augmented EntNet"},
         "visible_lower_and_upper_windows_recomputed": True,
         "no_prediction_interpolation": True,
-        "dense_grid_report": "reports/phase3_thermal/dense_grid_report.json",
-        "fit_source": "reports/phase3_thermal/thermal_report.json",
+        "dense_grid_report": str((SOURCE / "dense_grid_report.json").relative_to(ROOT)).replace("\\", "/"),
+        "fit_source": str((SOURCE / "thermal_report.json").relative_to(ROOT)).replace("\\", "/"),
         "boundary_errorbar_convention": "symmetric half of refined log10 bracket width",
     })
     path.write_text(json.dumps(manifest, indent=2) + "\n")
 
 
 def main() -> None:
+    global SOURCE, OUTPUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-dir", type=Path, default=SOURCE)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    parser.add_argument("--force", action="store_true", help="Replace existing figure outputs")
+    args = parser.parse_args()
+    SOURCE, OUTPUT = args.source_dir.resolve(), args.output.resolve()
+    if not args.force and (OUTPUT / "xy_thermal_predictions_combined.pdf").exists():
+        parser.error(f"figure output exists in {OUTPUT}; choose --output elsewhere or --force")
+    OUTPUT.mkdir(parents=True, exist_ok=True)
     validate_dense_against_base()
     prepare_sources()
     set_template_sources()
