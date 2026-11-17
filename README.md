@@ -37,6 +37,15 @@ python -m pytest -q tests
 ```
 
 On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1` instead.
+Windows may reject an editable install from a deeply nested clone with
+`WinError 206` (path too long). Clone to a short path such as `C:\entnet`.
+If a short clone path is unavailable, the following dependency-only install
+was also verified; all entry-point scripts add `src/` to their Python path:
+
+```powershell
+python -m pip install torch numpy h5py PyYAML psutil scipy 'scikit-learn>=1.5,<2' pandas matplotlib pfapack pytest
+```
+
 PyTorch may require a platform-specific CPU or CUDA wheel. TeNPy is optional
 and needed only for some full thermal-data generation routes.
 
