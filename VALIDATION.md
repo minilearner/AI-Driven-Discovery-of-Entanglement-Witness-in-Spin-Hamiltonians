@@ -5,7 +5,10 @@ independent branch was cloned from the public GitHub URL into a new directory,
 and a fresh virtual environment was created. The preserved private archive
 was read to assemble the benchmark package; it was not edited. All routine
 inference, download, plotting, and smoke training entry points use
-release-relative paths. Linux CI status is checked separately.
+release-relative paths. The Ubuntu GitHub Actions run for the updated `main`
+commit passed installation, 60 tests, model inference, the physical example,
+the small HDF5 metric check, and the final-route training smoke:
+[run 44018941912](https://github.com/minilearner/AI-Driven-Discovery-of-Entanglement-Witness-in-Spin-Hamiltonians/actions/runs/44018941912).
 
 ## Results checked
 
@@ -74,5 +77,5 @@ Direct installation of the same runtime and test dependencies in the fresh
 venv succeeded, after which the entire quick-start, test, download, six-set
 inference, figure, and smoke-training sequence passed. This is a Windows path
 limit, not an unavailable Python package; the README gives a short-clone-path
-recommendation and the tested dependency-only fallback. Ubuntu CI remains
-the check for the ordinary editable-install command.
+recommendation and the tested dependency-only fallback. Ubuntu CI passed
+the ordinary editable-install command.
